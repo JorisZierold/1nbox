@@ -200,9 +200,10 @@
 
     <script>
       function updateCountdown() {
-        const targetDate = new Date("August 6, 2025 00:00:00").getTime();
-        const now = new Date().getTime();
-        const timeLeft = targetDate - now;
+        // Sunday, August 3rd, 2025 at 12:00 PM ET (UTC-4)
+        const targetDate = new Date("2025-08-03T12:00:00-04:00");
+        const now = new Date();
+        const timeLeft = targetDate.getTime() - now.getTime();
 
         if (timeLeft > 0) {
           const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
