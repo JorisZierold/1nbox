@@ -1,0 +1,140 @@
+"use client";
+
+import { useState } from "react";
+import { Layers } from "lucide-react";
+import type { Action } from "@/lib/types";
+import {
+  securityActions,
+  utilityActions,
+  allocationActions,
+  promotionalAction,
+} from "@/lib/data";
+import { ActionSection } from "@/components/inbox/ActionSection";
+import { PromotionalAction } from "@/components/inbox/PromotionalAction";
+import { Sidebar } from "@/components/inbox/Sidebar";
+import { TopHeader } from "@/components/inbox/TopHeader";
+import { FilterControls } from "@/components/inbox/FilterControls";
+import { ActionDetailsPanel } from "@/components/inbox/ActionDetailsPanel";
+import { EmptyState } from "@/components/inbox/EmptyState";
+import { ConnectWalletState } from "@/components/inbox/ConnectWalletState";
+
+const allActions = [
+  ...securityActions,
+  ...utilityActions,
+  ...allocationActions,
+];
+const uniqueChains = [
+  { name: "All", icon: Layers },
+  ...Array.from(new Set(allActions.map((a) => a.chainName))).map((name) => {
+    const action = allActions.find((a) => a.chainName === name)!;
+    return { name: name, icon: action.chainIcon };
+  }),
+];
+
+export default function InboxPage() {
+  const [isWalletConnected, setIsWalletConnected] = useState(false);
+  const [selectedAction, setSelectedAction] = useState<Action | null>(null);
+  const [selectedChain, setSelectedChain] = useState("All");
+  const [selectedSidebarWallet, setSelectedSidebarWallet] =
+    useState("Main Wallet");
+
+  const handleActionClick = (action: Action) => {
+    setSelectedAction(action);
+  };
+
+  const handlePanelClose = () => {
+    setSelectedAction(null);
+  };
+
+  const filterActions = (actions: Action[]) => {
+    return actions.filter(
+      (action) =>
+        (selectedChain === "All" || action.chainName === selectedChain) &&
+        (selectedSidebarWallet === "All Wallets" ||
+          action.walletName === selectedSidebarWallet)
+    );
+  };
+
+  const filteredSecurityActions = filterActions(securityActions);
+  const filteredUtilityActions = filterActions(utilityActions);
+  const filteredAllocationActions = filterActions(allocationActions);
+  const hasActions =
+    filteredSecurityActions.length > 0 ||
+    filteredUtilityActions.length > 0 ||
+    filteredAllocationActions.length > 0;
+
+  return (
+    <div className="bg-black text-white min-h-screen">
+      <div className="flex flex-col lg:flex-row lg:h-screen">
+        <Sidebar
+          isWalletConnected={isWalletConnected}
+          selectedSidebarWallet={selectedSidebarWallet}
+          onWalletConnect={() => setIsWalletConnected(!isWalletConnected)}
+          onWalletSelect={setSelectedSidebarWallet}
+        />
+
+        {/* Main scrollable area */}
+        <div className="flex-1 flex flex-col lg:overflow-y-auto bg-black">
+          {/* Main Content */}
+          <main className="flex-1">
+            <TopHeader isWalletConnected={isWalletConnected} />
+
+            {/* Action Inbox */}
+            <div className="px-6 pb-6">
+              {isWalletConnected ? (
+                <div className="bg-gray-900/50 rounded-xl shadow-2xl border border-gray-800/50 backdrop-blur-sm">
+                  <div className="p-6">
+                    <FilterControls
+                      uniqueChains={uniqueChains}
+                      selectedChain={selectedChain}
+                      onChainSelect={setSelectedChain}
+                    />
+
+                    {/* Action Sections */}
+                    {hasActions ? (
+                      <div className="space-y-8">
+                        <ActionSection
+                          title="SECURITY"
+                          category="security"
+                          actions={filteredSecurityActions}
+                          onActionClick={handleActionClick}
+                        />
+                        <ActionSection
+                          title="UTILITY"
+                          category="utility"
+                          actions={filteredUtilityActions}
+                          onActionClick={handleActionClick}
+                        />
+                        <ActionSection
+                          title="ALLOCATION"
+                          category="allocation"
+                          actions={filteredAllocationActions}
+                          onActionClick={handleActionClick}
+                        />
+                      </div>
+                    ) : (
+                      <EmptyState />
+                    )}
+                  </div>
+                  {/* Promotional Action */}
+                  <div className="p-4 border-t border-gray-800/50">
+                    <PromotionalAction action={promotionalAction} />
+                  </div>
+                </div>
+              ) : (
+                <ConnectWalletState
+                  onConnect={() => setIsWalletConnected(true)}
+                />
+              )}
+            </div>
+          </main>
+        </div>
+      </div>
+
+      <ActionDetailsPanel
+        selectedAction={selectedAction}
+        onClose={handlePanelClose}
+      />
+    </div>
+  );
+}
