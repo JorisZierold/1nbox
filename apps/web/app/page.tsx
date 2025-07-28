@@ -17,6 +17,7 @@ import { FilterControls } from "@/components/inbox/FilterControls";
 import { ActionDetailsPanel } from "@/components/inbox/ActionDetailsPanel";
 import { EmptyState } from "@/components/inbox/EmptyState";
 import { ConnectWalletState } from "@/components/inbox/ConnectWalletState";
+import { useAppKitAccount } from "@reown/appkit/react";
 
 const allActions = [
   ...securityActions,
@@ -32,11 +33,11 @@ const uniqueChains = [
 ];
 
 export default function InboxPage() {
-  const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [selectedAction, setSelectedAction] = useState<Action | null>(null);
   const [selectedChain, setSelectedChain] = useState("All");
   const [selectedSidebarWallet, setSelectedSidebarWallet] =
     useState("Main Wallet");
+  const { isConnected: isWalletConnected } = useAppKitAccount();
 
   const handleActionClick = (action: Action) => {
     setSelectedAction(action);
@@ -67,9 +68,7 @@ export default function InboxPage() {
     <div className="bg-black text-white min-h-screen">
       <div className="flex flex-col lg:flex-row lg:h-screen">
         <Sidebar
-          isWalletConnected={isWalletConnected}
           selectedSidebarWallet={selectedSidebarWallet}
-          onWalletConnect={() => setIsWalletConnected(!isWalletConnected)}
           onWalletSelect={setSelectedSidebarWallet}
         />
 
@@ -77,7 +76,7 @@ export default function InboxPage() {
         <div className="flex-1 flex flex-col lg:overflow-y-auto bg-black">
           {/* Main Content */}
           <main className="flex-1">
-            <TopHeader isWalletConnected={isWalletConnected} />
+            <TopHeader />
 
             {/* Action Inbox */}
             <div className="px-6 pb-6">
@@ -122,9 +121,7 @@ export default function InboxPage() {
                   </div>
                 </div>
               ) : (
-                <ConnectWalletState
-                  onConnect={() => setIsWalletConnected(true)}
-                />
+                <ConnectWalletState />
               )}
             </div>
           </main>

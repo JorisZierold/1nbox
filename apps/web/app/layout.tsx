@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import { headers } from "next/headers";
+import ContextProvider from "@/context";
 
 export const metadata: Metadata = {
   title: "1nbox",
@@ -12,11 +14,14 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headersData = await headers();
+  const cookies = headersData.get("cookie");
+
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
       <body>
@@ -26,7 +31,7 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
-          {children}
+          <ContextProvider cookies={cookies}>{children}</ContextProvider>
         </ThemeProvider>
       </body>
     </html>

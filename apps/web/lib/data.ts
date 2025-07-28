@@ -1,17 +1,10 @@
-import type { Action, Category, Wallet } from "./types";
+import type { Action, Category } from "./types";
 import {
   Layers,
   Shield,
   Zap,
   PieChart,
   History,
-  WalletIcon,
-  LayoutGrid,
-  ShieldAlert,
-  Fuel,
-  Gift,
-  Repeat,
-  Sprout,
   Rabbit,
   Tag,
 } from "lucide-react";
@@ -22,22 +15,6 @@ export const categories: Category[] = [
   { name: "Utility", icon: Zap, count: 2 },
   { name: "Allocation", icon: PieChart, count: 3 },
   { name: "History", icon: History },
-];
-
-export const wallets: Wallet[] = [
-  { name: "All Wallets", icon: LayoutGrid, address: "", selected: false },
-  {
-    name: "Main Wallet",
-    icon: WalletIcon,
-    address: "0x7a...3f9b",
-    selected: true,
-  },
-  {
-    name: "Another Wallet",
-    icon: WalletIcon,
-    address: "0x4c...8e2d",
-    selected: false,
-  },
 ];
 
 export const securityActions: Action[] = [

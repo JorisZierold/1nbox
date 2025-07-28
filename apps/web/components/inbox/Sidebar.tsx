@@ -1,23 +1,64 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus } from "lucide-react";
+import { LayoutGrid, Plus, WalletIcon } from "lucide-react";
 import Link from "next/link";
+import { categories } from "@/lib/data";
+import {
+  useAppKit,
+  useAppKitAccount,
+  useWalletInfo,
+} from "@reown/appkit/react";
 import Image from "next/image";
-import { categories, wallets } from "@/lib/data";
 
 interface SidebarProps {
-  isWalletConnected: boolean;
   selectedSidebarWallet: string;
-  onWalletConnect: () => void;
   onWalletSelect: (walletName: string) => void;
 }
 
 export function Sidebar({
-  isWalletConnected,
   selectedSidebarWallet,
-  onWalletConnect,
   onWalletSelect,
 }: SidebarProps) {
+  const { open } = useAppKit();
+  const { address, allAccounts } = useAppKitAccount();
+  const { walletInfo } = useWalletInfo();
+
+  const walletIcon = walletInfo?.icon ? (
+    <img
+      src={walletInfo.icon}
+      alt="Wallet Icon"
+      width={20}
+      height={20}
+      className="h-5 w-5"
+    />
+  ) : (
+    <WalletIcon className="h-5 w-5" />
+  );
+
+  const wallets =
+    allAccounts.length > 0
+      ? [
+          {
+            name: "All Wallets",
+            icon: <LayoutGrid className="h-5 w-5" />,
+            address: "",
+            selected: false,
+          },
+          ...allAccounts.map((account) => ({
+            name:
+              account.address.slice(0, 4) + "..." + account.address.slice(-4),
+            icon:
+              address === account.address ? (
+                walletIcon
+              ) : (
+                <WalletIcon className="h-5 w-5" />
+              ),
+            address: "",
+            selected: address === account.address,
+          })),
+        ]
+      : [];
+
   return (
     <aside className="w-full lg:w-72 bg-black p-4 lg:p-6 lg:overflow-y-auto border-r border-gray-800/50">
       <header className="mb-8 flex items-center gap-3">
@@ -67,7 +108,7 @@ export function Sidebar({
             Wallets
           </h2>
           <ul className="space-y-1">
-            {isWalletConnected
+            {address
               ? wallets.map((wallet) => (
                   <li key={wallet.name}>
                     <button
@@ -79,7 +120,7 @@ export function Sidebar({
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <wallet.icon className="h-5 w-5" />
+                        {wallet.icon}
                         <span>{wallet.name}</span>
                       </div>
                       {wallet.address && (
@@ -95,11 +136,11 @@ export function Sidebar({
               <Button
                 variant="ghost"
                 className="w-full justify-start gap-3 text-gray-300 p-3 hover:bg-gray-800/50 hover:text-white transition-all duration-200"
-                onClick={onWalletConnect}
+                onClick={() => open({ view: "Connect" })}
               >
                 <Plus className="h-5 w-5" />
                 <span className="font-medium text-sm">
-                  {isWalletConnected ? "Add Wallet" : "Connect Wallet"}
+                  {address ? "Add Wallet" : "Connect Wallet"}
                 </span>
               </Button>
             </li>
