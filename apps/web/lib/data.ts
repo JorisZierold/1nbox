@@ -29,7 +29,6 @@ export const securityActions: Action[] = [
     tagType: "risk",
     walletName: "Main Wallet",
     chainName: "Ethereum",
-    chainIcon: Rabbit,
     chainColor: "text-gray-600",
     whyItMatters:
       "Unlimited approvals allow a protocol to move all of your tokens of a specific type. If the protocol is compromised, your funds could be stolen.",
@@ -47,7 +46,6 @@ export const securityActions: Action[] = [
     tagType: "attention",
     walletName: "Hardware Wallet",
     chainName: "Ethereum",
-    chainIcon: Rabbit,
     chainColor: "text-gray-600",
     whyItMatters:
       "Stale approvals are permissions granted to protocols you no longer use. These can become security liabilities if the protocol's code is exploited later.",
@@ -70,7 +68,6 @@ export const utilityActions: Action[] = [
     buttonVariant: "primary",
     walletName: "Main Wallet",
     chainName: "Ethereum",
-    chainIcon: Rabbit,
     chainColor: "text-gray-600",
     whyItMatters:
       "A low gas balance means you won't be able to pay for transaction fees on the Ethereum network, causing important actions (like revoking permissions) to fail.",
@@ -91,7 +88,6 @@ export const utilityActions: Action[] = [
     buttonVariant: "primary",
     walletName: "Main Wallet",
     chainName: "Arbitrum",
-    chainIcon: Rabbit,
     chainColor: "text-blue-600",
     whyItMatters:
       "Airdrops are free tokens distributed to users. They often have an expiration date, and unclaimed tokens are lost forever.",
@@ -114,7 +110,6 @@ export const allocationActions: Action[] = [
     buttonVariant: "secondary",
     walletName: "Hardware Wallet",
     chainName: "Ethereum",
-    chainIcon: Rabbit,
     chainColor: "text-gray-600",
     whyItMatters:
       "Rebalancing ensures your portfolio doesn't become over-exposed to a single asset's volatility, helping you stick to your risk tolerance and long-term goals.",
@@ -134,7 +129,6 @@ export const allocationActions: Action[] = [
     buttonVariant: "secondary",
     walletName: "Main Wallet",
     chainName: "Polygon",
-    chainIcon: Rabbit,
     chainColor: "text-purple-600",
     whyItMatters:
       "Capital efficiency is key in DeFi. Moving assets to higher-yield protocols (of similar risk) maximizes your potential returns.",
@@ -152,7 +146,6 @@ export const allocationActions: Action[] = [
     buttonVariant: "secondary",
     walletName: "Hardware Wallet",
     chainName: "Arbitrum",
-    chainIcon: Rabbit,
     chainColor: "text-blue-600",
     whyItMatters:
       "Limit orders allow you to buy or sell an asset at a specific price without constantly monitoring the market, automating your trading strategy.",
@@ -175,7 +168,6 @@ export const promotionalAction: Action = {
   link: "https://1inch.io",
   walletName: "",
   chainName: "",
-  chainIcon: () => null,
   chainColor: "",
   whyItMatters: "",
   educationalTip: "",

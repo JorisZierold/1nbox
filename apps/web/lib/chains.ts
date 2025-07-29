@@ -2,6 +2,7 @@ export const getChainIcon = (chainName: string): string => {
   const iconMap: Record<string, string> = {
     Ethereum: "/chains/ethereum.svg",
     "Arbitrum One": "/chains/arbitrum.svg",
+    Arbitrum: "/chains/arbitrum.svg",
     Polygon: "/chains/polygon.svg",
     Base: "/chains/base.svg",
     Optimism: "/chains/optimism.svg",

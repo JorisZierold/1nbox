@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
+import { getChainIcon } from "@/lib/chains";
 
 interface Chain {
   name: string;
-  icon: any;
 }
 
 interface FilterControlsProps {
@@ -33,7 +33,14 @@ export function FilterControls({
               : `text-gray-300 bg-gray-900/50 border-gray-700 hover:bg-gray-800/50 hover:text-white`
           }`}
         >
-          <chain.icon className="h-4 w-4" />
+          {chain.name !== "All" && (
+            <img
+              src={getChainIcon(chain.name)}
+              alt={chain.name}
+              className="w-4 h-4 object-contain flex-shrink-0"
+              title={chain.name}
+            />
+          )}
           {chain.name}
         </Button>
       ))}

@@ -4,6 +4,7 @@ import type { Action } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ChevronRight, Wallet } from "lucide-react";
+import { getChainIcon } from "@/lib/chains";
 
 interface ActionItemProps {
   action: Action;
@@ -23,7 +24,6 @@ export function ActionItem({ action, onClick }: ActionItemProps) {
     description,
     walletName,
     chainName,
-    chainIcon: ChainIcon,
     chainColor,
   } = action;
 
@@ -54,7 +54,12 @@ export function ActionItem({ action, onClick }: ActionItemProps) {
             <div
               className={`flex items-center gap-1.5 font-medium ${chainColor}`}
             >
-              <ChainIcon className="h-3 w-3" />
+              <img
+                src={getChainIcon(chainName)}
+                alt={chainName}
+                className="w-3 h-3 object-contain flex-shrink-0"
+                title={chainName}
+              />
               <span>{chainName}</span>
             </div>
           </div>
