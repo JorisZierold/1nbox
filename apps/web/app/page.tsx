@@ -17,6 +17,7 @@ import { FilterControls } from "@/components/inbox/FilterControls";
 import { ActionDetailsPanel } from "@/components/inbox/ActionDetailsPanel";
 import { EmptyState } from "@/components/inbox/EmptyState";
 import { ConnectWalletState } from "@/components/inbox/ConnectWalletState";
+import { BalancesCard } from "@/components/inbox/balance/BalancesCard";
 import { useAppKitAccount } from "@reown/appkit/react";
 
 const allActions = [
@@ -27,8 +28,7 @@ const allActions = [
 const uniqueChains = [
   { name: "All", icon: Layers },
   ...Array.from(new Set(allActions.map((a) => a.chainName))).map((name) => {
-    const action = allActions.find((a) => a.chainName === name)!;
-    return { name: name, icon: action.chainIcon };
+    return { name };
   }),
 ];
 
@@ -77,6 +77,13 @@ export default function InboxPage() {
           {/* Main Content */}
           <main className="flex-1">
             <TopHeader />
+
+            {/* Balances Card */}
+            {isWalletConnected && (
+              <div className="px-6 pb-6">
+                <BalancesCard />
+              </div>
+            )}
 
             {/* Action Inbox */}
             <div className="px-6 pb-6">
