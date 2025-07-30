@@ -1,12 +1,20 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { History, RefreshCw, Filter, ChevronRight } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import {
+  History,
+  RefreshCw,
+  Filter,
+  ChevronRight,
+  CheckCheck,
+} from "lucide-react";
 import { ProcessedTransaction } from "@/lib/types";
 import { TransactionItem } from "./TransactionItem";
 import { TransactionDetails } from "./TransactionDetails";
 import { getChainIcon } from "@/lib/chains";
 import { TransactionSkeleton } from "./TransactionSkeleton";
+import { useTransactionAlerts } from "@/hooks/use-transaction-alerts";
 
 interface ChainStats {
   chainId: string;
@@ -38,6 +46,14 @@ export const TransactionList = ({
     useState<ProcessedTransaction | null>(null);
   const [filterType, setFilterType] = useState<string>("all");
 
+  // Add transaction alerts hook
+  const {
+    unseenCount,
+    isTransactionUnseen,
+    markTransactionAsSeen,
+    markAllAsSeen,
+  } = useTransactionAlerts(allTransactions);
+
   const filteredTransactions = transactions.filter((tx) => {
     if (filterType === "all") return true;
     if (filterType === "in") return tx.direction === "in";
@@ -55,6 +71,14 @@ export const TransactionList = ({
     }
   };
 
+  // Enhanced transaction click handler
+  const handleTransactionClick = async (transaction: ProcessedTransaction) => {
+    if (isTransactionUnseen(transaction.id)) {
+      await markTransactionAsSeen(transaction);
+    }
+    setSelectedTransaction(transaction);
+  };
+
   return (
     <div className="space-y-4">
       <Card className="bg-gray-900/50 border-gray-800/50 backdrop-blur-sm">
@@ -68,24 +92,49 @@ export const TransactionList = ({
                 <h3 className="text-lg font-semibold text-white">
                   Transaction History
                 </h3>
-                <p className="text-sm text-gray-400">
-                  {allTransactions.length} transactions across{" "}
-                  {chainStats.length} chains
-                </p>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm text-gray-400">
+                    {allTransactions.length} transactions across{" "}
+                    {chainStats.length} chains
+                  </p>
+                  {/* Add unseen count badge */}
+                  {unseenCount > 0 && (
+                    <Badge
+                      variant="secondary"
+                      className="bg-blue-500/20 text-blue-300 border-blue-500/50"
+                    >
+                      {unseenCount} new
+                    </Badge>
+                  )}
+                </div>
               </div>
             </div>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-gray-400 hover:text-white hover:bg-gray-800/50"
-              onClick={onRefresh}
-              disabled={isLoading}
-            >
-              <RefreshCw
-                className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
-              />
-            </Button>
+            <div className="flex gap-2">
+              {/* Add mark all as seen button */}
+              {unseenCount > 0 && (
+                <Button
+                  onClick={markAllAsSeen}
+                  variant="outline"
+                  size="sm"
+                  className="h-8 text-xs"
+                >
+                  <CheckCheck className="h-3 w-3 mr-1" />
+                  Mark all as seen
+                </Button>
+              )}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-gray-400 hover:text-white hover:bg-gray-800/50"
+                onClick={onRefresh}
+                disabled={isLoading}
+              >
+                <RefreshCw
+                  className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
+                />
+              </Button>
+            </div>
           </div>
         </CardHeader>
 
@@ -222,7 +271,8 @@ export const TransactionList = ({
                 <TransactionItem
                   key={transaction.id}
                   transaction={transaction}
-                  onClick={setSelectedTransaction}
+                  onClick={handleTransactionClick}
+                  isUnseen={isTransactionUnseen(transaction.id)}
                 />
               ))
             ) : (

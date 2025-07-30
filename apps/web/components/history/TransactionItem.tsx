@@ -12,11 +12,13 @@ import {
 interface TransactionItemProps {
   transaction: ProcessedTransaction;
   onClick?: (transaction: ProcessedTransaction) => void;
+  isUnseen?: boolean;
 }
 
 export const TransactionItem = ({
   transaction,
   onClick,
+  isUnseen = false,
 }: TransactionItemProps) => {
   const handleCopyHash = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -31,11 +33,19 @@ export const TransactionItem = ({
 
   return (
     <Card
-      className="p-3 bg-gray-800/30 border-gray-700/50 hover:border-gray-600/50 transition-colors cursor-pointer"
+      className={`p-3 transition-colors cursor-pointer ${
+        isUnseen
+          ? "bg-blue-500/5 border-blue-500/50 hover:border-blue-400/50" // Gmail-like unseen styling
+          : "bg-gray-800/30 border-gray-700/50 hover:border-gray-600/50"
+      }`}
       onClick={() => onClick?.(transaction)}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
+          {isUnseen && (
+            <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0" />
+          )}
+
           {/* Transaction type icon */}
           <div className="flex items-center justify-center w-8 h-8 bg-gray-700/50 rounded-full">
             <span className="text-sm">
@@ -46,7 +56,11 @@ export const TransactionItem = ({
           {/* Transaction details */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-white capitalize">
+              <span
+                className={`text-sm font-medium capitalize ${
+                  isUnseen ? "text-white" : "text-white"
+                }`}
+              >
                 {transaction.type}
               </span>
 
