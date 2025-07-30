@@ -69,12 +69,22 @@ export const processTransactionHistory = (
     // Format fee
     const formattedFee = formatTransactionAmount(details.feeInSmallestNative);
 
+    // Fix direction based on transaction type
+    let direction: "in" | "out" = item.direction;
+
+    // Override direction based on transaction type to ensure consistency
+    if (details.type.toLowerCase() === "receive") {
+      direction = "in";
+    } else if (details.type.toLowerCase() === "send") {
+      direction = "out";
+    }
+
     return {
       id: item.id,
       hash: details.txHash,
       timestamp: item.timeMs,
       type: details.type,
-      direction: item.direction,
+      direction,
       chainId: details.chainId,
       chainName: getChainName(details.chainId),
       amount,
