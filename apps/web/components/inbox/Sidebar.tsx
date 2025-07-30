@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { LayoutGrid, Plus, WalletIcon } from "lucide-react";
+import { LayoutGrid, Plus, WalletIcon, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { categories } from "@/lib/data";
 import {
@@ -60,11 +60,11 @@ export function Sidebar({
       : [];
 
   return (
-    <aside className="w-full lg:w-72 bg-background/95 backdrop-blur-sm p-4 lg:p-6 lg:overflow-y-auto border-r border-border">
+    <aside className="w-full lg:w-72 bg-background/95 backdrop-blur-sm p-4 lg:p-6 lg:overflow-y-auto border-r border-border flex flex-col">
       <header className="mb-8 flex items-center gap-3">
         <Logo />
       </header>
-      <nav className="space-y-8">
+      <nav className="space-y-8 flex-1">
         <div>
           <h2 className="text-sm font-semibold text-muted-foreground px-3 mb-2">
             Categories
@@ -145,6 +145,43 @@ export function Sidebar({
           </ul>
         </div>
       </nav>
+
+      {/* Feedback & Social CTA */}
+      <div className="mt-auto pt-4 border-t border-border space-y-2">
+        <Link
+          href="mailto:info@1nbox.xyz?subject=Feedback for 1nbox"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block"
+        >
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start gap-2 text-muted-foreground hover:text-foreground text-xs"
+          >
+            <MessageCircle className="h-3 w-3" />
+            Send Feedback
+          </Button>
+        </Link>
+
+        <Link
+          href="https://x.com/1nbox_xyz"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block"
+        >
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start gap-2 text-muted-foreground hover:text-foreground text-xs"
+          >
+            <svg className="h-3 w-3" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+            Follow on X
+          </Button>
+        </Link>
+      </div>
     </aside>
   );
 }
