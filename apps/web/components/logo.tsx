@@ -1,7 +1,11 @@
 import { useTheme } from "next-themes";
 import Image from "next/image";
 
-export const Logo = () => {
+interface LogoProps {
+  size?: number;
+}
+
+export const Logo = ({ size = 100 }: LogoProps) => {
   const { theme } = useTheme();
 
   // Dynamic logo styling based on theme
@@ -36,8 +40,8 @@ export const Logo = () => {
     <Image
       src="/logo-white.svg"
       alt="1nbox"
-      width={100}
-      height={100}
+      width={size}
+      height={size}
       className="transition-all duration-200"
       style={getLogoStyle()}
     />

@@ -16,10 +16,10 @@ import { TopHeader } from "@/components/inbox/TopHeader";
 import { FilterControls } from "@/components/inbox/FilterControls";
 import { ActionDetailsPanel } from "@/components/inbox/ActionDetailsPanel";
 import { EmptyState } from "@/components/inbox/EmptyState";
-import { ConnectWalletState } from "@/components/inbox/ConnectWalletState";
 import { BalancesCard } from "@/components/inbox/balance/BalancesCard";
 import { useAppKitAccount } from "@reown/appkit/react";
 import { TransactionHistory } from "@/components/history/TransactionHistory";
+import { SplashScreen } from "@/components/intro/SplashScreen";
 
 const allActions = [
   ...securityActions,
@@ -34,6 +34,7 @@ const uniqueChains = [
 ];
 
 export default function InboxPage() {
+  const [splashed, setSplashed] = useState(false);
   const [selectedAction, setSelectedAction] = useState<Action | null>(null);
   const [selectedChain, setSelectedChain] = useState("All");
   const [selectedSidebarWallet, setSelectedSidebarWallet] =
@@ -65,6 +66,10 @@ export default function InboxPage() {
     filteredUtilityActions.length > 0 ||
     filteredAllocationActions.length > 0;
 
+  if (!splashed || !isWalletConnected) {
+    return <SplashScreen setSplashed={setSplashed} />;
+  }
+
   return (
     <div className="bg-background text-foreground min-h-screen">
       <div className="flex flex-col lg:flex-row lg:h-screen">
@@ -91,49 +96,45 @@ export default function InboxPage() {
 
             {/* Action Inbox */}
             <div className="px-6 pb-6">
-              {isWalletConnected ? (
-                <div className="bg-muted/30 rounded-xl shadow-2xl border border-border backdrop-blur-sm">
-                  <div className="p-6">
-                    <FilterControls
-                      uniqueChains={uniqueChains}
-                      selectedChain={selectedChain}
-                      onChainSelect={setSelectedChain}
-                    />
+              <div className="bg-muted/30 rounded-xl shadow-2xl border border-border backdrop-blur-sm">
+                <div className="p-6">
+                  <FilterControls
+                    uniqueChains={uniqueChains}
+                    selectedChain={selectedChain}
+                    onChainSelect={setSelectedChain}
+                  />
 
-                    {/* Action Sections */}
-                    {hasActions ? (
-                      <div className="space-y-8">
-                        <ActionSection
-                          title="SECURITY"
-                          category="security"
-                          actions={filteredSecurityActions}
-                          onActionClick={handleActionClick}
-                        />
-                        <ActionSection
-                          title="UTILITY"
-                          category="utility"
-                          actions={filteredUtilityActions}
-                          onActionClick={handleActionClick}
-                        />
-                        <ActionSection
-                          title="ALLOCATION"
-                          category="allocation"
-                          actions={filteredAllocationActions}
-                          onActionClick={handleActionClick}
-                        />
-                      </div>
-                    ) : (
-                      <EmptyState />
-                    )}
-                  </div>
-                  {/* Promotional Action */}
-                  <div className="p-4 border-t border-border">
-                    <PromotionalAction action={promotionalAction} />
-                  </div>
+                  {/* Action Sections */}
+                  {hasActions ? (
+                    <div className="space-y-8">
+                      <ActionSection
+                        title="SECURITY"
+                        category="security"
+                        actions={filteredSecurityActions}
+                        onActionClick={handleActionClick}
+                      />
+                      <ActionSection
+                        title="UTILITY"
+                        category="utility"
+                        actions={filteredUtilityActions}
+                        onActionClick={handleActionClick}
+                      />
+                      <ActionSection
+                        title="ALLOCATION"
+                        category="allocation"
+                        actions={filteredAllocationActions}
+                        onActionClick={handleActionClick}
+                      />
+                    </div>
+                  ) : (
+                    <EmptyState />
+                  )}
                 </div>
-              ) : (
-                <ConnectWalletState />
-              )}
+                {/* Promotional Action */}
+                <div className="p-4 border-t border-border">
+                  <PromotionalAction action={promotionalAction} />
+                </div>
+              </div>
             </div>
           </main>
         </div>
