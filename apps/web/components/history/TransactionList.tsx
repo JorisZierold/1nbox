@@ -87,19 +87,19 @@ export const TransactionList = ({
 
   return (
     <div className="space-y-4">
-      <Card className="bg-gray-900/50 border-gray-800/50 backdrop-blur-sm">
+      <Card className="bg-card border-border backdrop-blur-sm">
         <CardHeader className="pb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-500/20 rounded-lg">
-                <History className="h-5 w-5 text-purple-400" />
+              <div className="p-2 bg-primary/20 rounded-lg">
+                <History className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">
+                <h3 className="text-lg font-semibold text-foreground">
                   Transaction History
                 </h3>
                 <div className="flex items-center gap-2">
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-muted-foreground">
                     {allTransactions.length} transactions across{" "}
                     {chainStats.length} chains
                   </p>
@@ -107,7 +107,7 @@ export const TransactionList = ({
                   {unseenCount > 0 && (
                     <Badge
                       variant="secondary"
-                      className="bg-blue-500/20 text-blue-300 border-blue-500/50"
+                      className="text-primary border border-primary/50"
                     >
                       {unseenCount} new
                     </Badge>
@@ -132,7 +132,7 @@ export const TransactionList = ({
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 text-gray-400 hover:text-white hover:bg-gray-800/50"
+                className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-accent"
                 onClick={onRefresh}
                 disabled={isLoading}
               >
@@ -148,7 +148,7 @@ export const TransactionList = ({
           {/* Chain Distribution */}
           {chainStats.length > 0 && (
             <div>
-              <h3 className="text-sm font-medium text-gray-300 mb-3">
+              <h3 className="text-sm font-medium text-muted-foreground mb-3">
                 Chain Distribution
               </h3>
               <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
@@ -157,8 +157,8 @@ export const TransactionList = ({
                     key={chain.chainId}
                     className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors cursor-pointer group flex-shrink-0 min-w-fit select-none ${
                       selectedChainId === chain.chainId
-                        ? "bg-purple-500/20 border-purple-500/50"
-                        : "bg-gray-800/50 border-gray-700/50 hover:border-gray-600/50"
+                        ? "bg-primary/20 border-primary/50"
+                        : "bg-muted border-border hover:border-muted-foreground/50"
                     }`}
                     onClick={() => handleChainClick(chain.chainId)}
                   >
@@ -172,16 +172,16 @@ export const TransactionList = ({
                     <span
                       className={`text-sm font-medium whitespace-nowrap ${
                         selectedChainId === chain.chainId
-                          ? "text-purple-300"
-                          : "text-white group-hover:text-gray-200"
+                          ? "text-primary"
+                          : "text-foreground group-hover:text-muted-foreground"
                       }`}
                     >
                       {chain.chainName}
                     </span>
-                    <span className="text-xs text-gray-400 whitespace-nowrap">
+                    <span className="text-xs text-muted-foreground whitespace-nowrap">
                       {chain.transactionCount}
                     </span>
-                    <ChevronRight className="h-3 w-3 text-gray-500 group-hover:text-gray-400 flex-shrink-0" />
+                    <ChevronRight className="h-3 w-3 text-muted-foreground group-hover:text-foreground flex-shrink-0" />
                   </div>
                 ))}
               </div>
@@ -190,7 +190,7 @@ export const TransactionList = ({
 
           {/* Current Filter Info */}
           {selectedChainId && (
-            <div className="flex items-center gap-2 p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg">
+            <div className="flex items-center gap-2 p-3 bg-primary/10 border border-primary/20 rounded-lg">
               <img
                 src={getChainIcon(
                   chainStats.find((c) => c.chainId === selectedChainId)
@@ -199,7 +199,7 @@ export const TransactionList = ({
                 alt=""
                 className="w-4 h-4 object-contain"
               />
-              <span className="text-sm text-purple-300">
+              <span className="text-sm text-primary">
                 Showing transactions from{" "}
                 {
                   chainStats.find((c) => c.chainId === selectedChainId)
@@ -208,7 +208,7 @@ export const TransactionList = ({
               </span>
               <button
                 onClick={() => onChainSelect?.(null)}
-                className="text-xs text-purple-400 hover:text-purple-300 ml-auto"
+                className="text-xs text-primary hover:text-primary/80 ml-auto"
               >
                 View All Chains
               </button>
@@ -217,29 +217,33 @@ export const TransactionList = ({
 
           {/* Filters */}
           <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
-            <Filter className="h-4 w-4 text-gray-400 flex-shrink-0" />
-            <button
+            <Filter className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => setFilterType("all")}
               className={`px-3 py-1 rounded-full text-xs whitespace-nowrap transition-colors ${
                 filterType === "all"
-                  ? "bg-blue-500/20 text-blue-300 border border-blue-500/50"
-                  : "bg-gray-800/50 text-gray-400 hover:text-white"
+                  ? "bg-primary/20 text-primary border border-primary/50"
+                  : "bg-muted text-muted-foreground hover:text-foreground"
               }`}
             >
               All {transactions.length}
-            </button>
+            </Button>
             {uniqueTypes.map((type) => (
-              <button
+              <Button
+                variant="ghost"
+                size="sm"
                 key={type}
                 onClick={() => setFilterType(type)}
                 className={`px-3 py-1 rounded-full text-xs whitespace-nowrap transition-colors ${
                   filterType === type
-                    ? "bg-purple-500/20 text-purple-300 border border-purple-500/50"
-                    : "bg-gray-800/50 text-gray-400 hover:text-white"
+                    ? "bg-primary/20 text-primary border border-primary/50"
+                    : "bg-muted text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {type} {transactions.filter((tx) => tx.type === type).length}
-              </button>
+              </Button>
             ))}
           </div>
 
@@ -260,7 +264,7 @@ export const TransactionList = ({
                 />
               ))
             ) : (
-              <div className="text-center py-8 text-gray-400">
+              <div className="text-center py-8 text-muted-foreground">
                 No transactions found
               </div>
             )}

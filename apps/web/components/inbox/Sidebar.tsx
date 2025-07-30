@@ -8,7 +8,7 @@ import {
   useAppKitAccount,
   useWalletInfo,
 } from "@reown/appkit/react";
-import Image from "next/image";
+import { Logo } from "../logo";
 
 interface SidebarProps {
   selectedSidebarWallet: string;
@@ -60,13 +60,13 @@ export function Sidebar({
       : [];
 
   return (
-    <aside className="w-full lg:w-72 bg-black p-4 lg:p-6 lg:overflow-y-auto border-r border-gray-800/50">
+    <aside className="w-full lg:w-72 bg-background/95 backdrop-blur-sm p-4 lg:p-6 lg:overflow-y-auto border-r border-border">
       <header className="mb-8 flex items-center gap-3">
-        <Image src="/logo-white.svg" alt="1nbox" width={100} height={100} />
+        <Logo />
       </header>
       <nav className="space-y-8">
         <div>
-          <h2 className="text-sm font-semibold text-gray-400 px-3 mb-2">
+          <h2 className="text-sm font-semibold text-muted-foreground px-3 mb-2">
             Categories
           </h2>
           <ul className="space-y-1">
@@ -76,8 +76,8 @@ export function Sidebar({
                   href="#"
                   className={`flex items-center justify-between p-3 rounded-lg text-sm font-medium transition-all duration-200 ${
                     item.selected
-                      ? "bg-blue-600 text-white shadow-lg shadow-blue-600/25"
-                      : "text-gray-300 hover:bg-gray-800/50 hover:text-white"
+                      ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -88,11 +88,9 @@ export function Sidebar({
                     <Badge
                       variant={item.selected ? "default" : "secondary"}
                       className={
-                        item.name === "Security"
-                          ? "bg-red-600 text-white border-red-500"
-                          : item.selected
-                          ? "bg-white/20 text-white border-white/30"
-                          : "bg-gray-800 text-gray-300 border-gray-700"
+                        item.selected
+                          ? "bg-primary text-primary-foreground"
+                          : ""
                       }
                     >
                       {item.count}
@@ -104,7 +102,7 @@ export function Sidebar({
           </ul>
         </div>
         <div>
-          <h2 className="text-sm font-semibold text-gray-400 px-3 mb-2">
+          <h2 className="text-sm font-semibold text-muted-foreground px-3 mb-2">
             Wallets
           </h2>
           <ul className="space-y-1">
@@ -115,8 +113,8 @@ export function Sidebar({
                       onClick={() => onWalletSelect(wallet.name)}
                       className={`w-full flex items-center justify-between p-3 rounded-lg text-sm font-medium transition-all duration-200 ${
                         selectedSidebarWallet === wallet.name
-                          ? "bg-blue-600 text-white shadow-lg shadow-blue-600/25"
-                          : "text-gray-300 hover:bg-gray-800/50 hover:text-white"
+                          ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
                       }`}
                     >
                       <div className="flex items-center gap-3">
@@ -124,7 +122,7 @@ export function Sidebar({
                         <span>{wallet.name}</span>
                       </div>
                       {wallet.address && (
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-muted-foreground/70">
                           {wallet.address}
                         </span>
                       )}
@@ -135,7 +133,7 @@ export function Sidebar({
             <li>
               <Button
                 variant="ghost"
-                className="w-full justify-start gap-3 text-gray-300 p-3 hover:bg-gray-800/50 hover:text-white transition-all duration-200"
+                className="w-full justify-start gap-3 text-muted-foreground p-3 hover:bg-muted hover:text-foreground transition-all duration-200"
                 onClick={() => open({ view: "Connect" })}
               >
                 <Plus className="h-5 w-5" />

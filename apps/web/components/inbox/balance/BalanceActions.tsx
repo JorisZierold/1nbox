@@ -33,7 +33,7 @@ export const BalanceActions = ({ portfolioData }: BalanceActionsProps) => {
         <Button
           variant="outline"
           size="sm"
-          className="bg-blue-500/10 border-blue-500/30 text-blue-400 hover:bg-blue-500/20 hover:border-blue-500/50"
+          className="bg-info/10 border-info/30 text-info hover:bg-info/20 hover:border-info/50"
           onClick={() => handleActionClickFromCard("sweep_dust")}
         >
           <Coins className="h-3 w-3 mr-1" />
@@ -44,7 +44,7 @@ export const BalanceActions = ({ portfolioData }: BalanceActionsProps) => {
         <Button
           variant="outline"
           size="sm"
-          className="bg-yellow-500/10 border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/20 hover:border-yellow-500/50"
+          className="bg-warning/10 border-warning/30 text-warning hover:bg-warning/20 hover:border-warning/50"
           onClick={() => handleActionClickFromCard("top_up_gas")}
         >
           <Zap className="h-3 w-3 mr-1" />
@@ -55,11 +55,11 @@ export const BalanceActions = ({ portfolioData }: BalanceActionsProps) => {
         <Button
           variant="outline"
           size="sm"
-          className="bg-orange-500/10 border-orange-500/30 text-orange-400 hover:bg-orange-500/20 hover:border-orange-500/50"
+          className="bg-success/10 border-success/30 text-success hover:bg-success/20 hover:border-success/50"
           onClick={() => handleActionClickFromCard("rebalance")}
         >
           <TrendingUp className="h-3 w-3 mr-1" />
-          Review Rebalance
+          Rebalance
         </Button>
       )}
     </div>

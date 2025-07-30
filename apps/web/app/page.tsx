@@ -66,7 +66,7 @@ export default function InboxPage() {
     filteredAllocationActions.length > 0;
 
   return (
-    <div className="bg-black text-white min-h-screen">
+    <div className="bg-background text-foreground min-h-screen">
       <div className="flex flex-col lg:flex-row lg:h-screen">
         <Sidebar
           selectedSidebarWallet={selectedSidebarWallet}
@@ -74,7 +74,7 @@ export default function InboxPage() {
         />
 
         {/* Main scrollable area */}
-        <div className="flex-1 flex flex-col lg:overflow-y-auto bg-black">
+        <div className="flex-1 flex flex-col lg:overflow-y-auto bg-background">
           {/* Main Content */}
           <main className="flex-1">
             <TopHeader />
@@ -92,7 +92,7 @@ export default function InboxPage() {
             {/* Action Inbox */}
             <div className="px-6 pb-6">
               {isWalletConnected ? (
-                <div className="bg-gray-900/50 rounded-xl shadow-2xl border border-gray-800/50 backdrop-blur-sm">
+                <div className="bg-muted/30 rounded-xl shadow-2xl border border-border backdrop-blur-sm">
                   <div className="p-6">
                     <FilterControls
                       uniqueChains={uniqueChains}
@@ -127,7 +127,7 @@ export default function InboxPage() {
                     )}
                   </div>
                   {/* Promotional Action */}
-                  <div className="p-4 border-t border-gray-800/50">
+                  <div className="p-4 border-t border-border">
                     <PromotionalAction action={promotionalAction} />
                   </div>
                 </div>

@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createAppKit } from "@reown/appkit/react";
 import React, { type ReactNode } from "react";
 import { cookieToInitialState, WagmiProvider, type Config } from "wagmi";
+import { ThemeProvider } from "next-themes";
 
 const queryClient = new QueryClient();
 
@@ -54,7 +55,18 @@ function ContextProvider({
       config={wagmiAdapter.wagmiConfig as Config}
       initialState={initialState}
     >
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={false}
+          themes={["light", "dark", "ocean", "sunset", "rose"]}
+          disableTransitionOnChange={false}
+          storageKey="1nbox-theme"
+        >
+          {children}
+        </ThemeProvider>
+      </QueryClientProvider>
     </WagmiProvider>
   );
 }

@@ -2,23 +2,24 @@ import { networks } from "./wagmi-config";
 
 export const getChainIcon = (chainName: string): string => {
   const iconMap: Record<string, string> = {
-    Ethereum: "/chains/ethereum.svg",
-    "Arbitrum One": "/chains/arbitrum.svg",
-    Arbitrum: "/chains/arbitrum.svg",
-    Polygon: "/chains/polygon.svg",
-    Base: "/chains/base.svg",
-    Optimism: "/chains/optimism.svg",
-    Avalanche: "/chains/avalanche.svg",
-    "zkSync Era": "/chains/zksync.svg",
-    Solana: "/chains/solana.svg",
-    "BNB Smart Chain": "/chains/bnb.svg",
-    Gnosis: "/chains/gnosis.svg",
-    Linea: "/chains/linea.svg",
-    Sonic: "/chains/sonic.svg",
-    UniChain: "/chains/unichain.svg",
+    ethereum: "/chains/ethereum.svg",
+    "arbitrum one": "/chains/arbitrum.svg",
+    arbitrum: "/chains/arbitrum.svg",
+    polygon: "/chains/polygon.svg",
+    base: "/chains/base.svg",
+    optimism: "/chains/optimism.svg",
+    "op mainnet": "/chains/optimism.svg",
+    avalanche: "/chains/avalanche.svg",
+    "zksync era": "/chains/zksync.svg",
+    solana: "/chains/solana.svg",
+    "bnb smart chain": "/chains/bnb.svg",
+    gnosis: "/chains/gnosis.svg",
+    linea: "/chains/linea.svg",
+    sonic: "/chains/sonic.svg",
+    unichain: "/chains/unichain.svg",
   };
 
-  return iconMap[chainName] || "/chains/ethereum.svg";
+  return iconMap[chainName.toLowerCase()] || "/chains/ethereum.svg";
 };
 
 export const getExplorerUrl = (chainId: number): string => {

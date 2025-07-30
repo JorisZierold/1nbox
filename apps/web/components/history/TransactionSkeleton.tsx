@@ -1,7 +1,7 @@
 import { Skeleton } from "../ui/skeleton";
 
 export const TransactionSkeleton = () => (
-  <div className="flex items-center gap-3 p-3 bg-gray-800/30 rounded-lg border border-gray-700/50">
+  <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg border border-border">
     {/* Icon skeleton */}
     <Skeleton className="w-8 h-8 rounded-full" />
 

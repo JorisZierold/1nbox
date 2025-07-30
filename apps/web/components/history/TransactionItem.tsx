@@ -3,11 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Copy } from "lucide-react";
 import { ProcessedTransaction } from "@/lib/types";
 import { getChainIcon, getExplorerUrl } from "@/lib/chains";
-import {
-  getTransactionTypeIcon,
-  getTransactionTypeColor,
-  formatRelativeTime,
-} from "@/lib/history";
+import { getTransactionTypeIcon, formatRelativeTime } from "@/lib/history";
 
 interface TransactionItemProps {
   transaction: ProcessedTransaction;
@@ -35,19 +31,21 @@ export const TransactionItem = ({
     <Card
       className={`p-3 transition-colors cursor-pointer ${
         isUnseen
-          ? "bg-blue-500/5 border-blue-500/50 hover:border-blue-400/50" // Gmail-like unseen styling
-          : "bg-gray-800/30 border-gray-700/50 hover:border-gray-600/50"
+          ? "bg-primary/5 border-primary/50 hover:border-primary"
+          : "bg-muted/40 border-border hover:border-muted-foreground/50"
       }`}
       onClick={() => onClick?.(transaction)}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          {isUnseen && (
-            <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0" />
-          )}
+          <div
+            className={`w-2 h-2 ${
+              isUnseen ? "bg-info" : "bg-transparent"
+            } rounded-full flex-shrink-0`}
+          />
 
           {/* Transaction type icon */}
-          <div className="flex items-center justify-center w-8 h-8 bg-gray-700/50 rounded-full">
+          <div className="flex items-center justify-center w-8 h-8 bg-muted rounded-full">
             <span className="text-sm">
               {getTransactionTypeIcon(transaction.type)}
             </span>
@@ -57,9 +55,7 @@ export const TransactionItem = ({
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
               <span
-                className={`text-sm font-medium capitalize ${
-                  isUnseen ? "text-white" : "text-white"
-                }`}
+                className={`text-sm font-medium capitalize text-foreground`}
               >
                 {transaction.type}
               </span>
@@ -80,7 +76,7 @@ export const TransactionItem = ({
               )}
             </div>
 
-            <div className="flex items-center gap-2 text-xs text-gray-400">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <span>{formatRelativeTime(transaction.timestamp)}</span>
               <span>•</span>
               <span className="font-mono truncate max-w-[100px]">
@@ -94,15 +90,16 @@ export const TransactionItem = ({
         <div className="flex items-center gap-3">
           <div className="text-right">
             <div
-              className={`text-sm font-medium ${getTransactionTypeColor(
-                transaction.type,
-                transaction.direction
-              )}`}
+              className={`text-sm font-medium ${
+                transaction.direction === "out"
+                  ? "text-destructive"
+                  : "text-success"
+              }`}
             >
               {transaction.direction === "out" ? "-" : "+"}
               {transaction.formattedAmount} {transaction.symbol}
             </div>
-            <div className="text-xs text-gray-500">
+            <div className="text-xs text-muted-foreground">
               Fee: {transaction.formattedFee} ETH
             </div>
           </div>
@@ -110,14 +107,14 @@ export const TransactionItem = ({
           <div className="flex items-center gap-1">
             <button
               onClick={handleCopyHash}
-              className="p-1 text-gray-400 hover:text-white transition-colors"
+              className="p-1 text-muted-foreground hover:text-foreground transition-colors"
               title="Copy transaction hash"
             >
               <Copy className="h-3 w-3" />
             </button>
             <button
               onClick={handleViewOnExplorer}
-              className="p-1 text-gray-400 hover:text-white transition-colors"
+              className="p-1 text-muted-foreground hover:text-foreground transition-colors"
               title="View on explorer"
             >
               <ExternalLink className="h-3 w-3" />

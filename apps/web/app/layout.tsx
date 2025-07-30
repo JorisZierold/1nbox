@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Inter } from "next/font/google";
-import { ThemeProvider } from "@/components/theme-provider";
 import { headers } from "next/headers";
 import ContextProvider from "@/context";
 
@@ -25,14 +24,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
-          <ContextProvider cookies={cookies}>{children}</ContextProvider>
-        </ThemeProvider>
+        <ContextProvider cookies={cookies}>{children}</ContextProvider>
       </body>
     </html>
   );

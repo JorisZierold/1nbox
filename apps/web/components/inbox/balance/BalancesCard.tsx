@@ -4,7 +4,12 @@ import { Button } from "@/components/ui/button";
 import { RefreshCw, ChevronRight, Wallet } from "lucide-react";
 import { useBalances } from "@/hooks/use-balances";
 import { getChainIcon } from "@/lib/chains";
-import { ChainBalance, TopHolding, TokenHolding, formatCurrency } from "@/lib/portfolio";
+import {
+  ChainBalance,
+  TopHolding,
+  TokenHolding,
+  formatCurrency,
+} from "@/lib/portfolio";
 import { BalanceActions } from "./BalanceActions";
 import { BalancesCardSkeleton } from "./BalancesCardSkeleton";
 
@@ -43,18 +48,18 @@ export const BalancesCard = () => {
   }
 
   return (
-    <Card className="bg-gray-900/50 border-gray-800/50 backdrop-blur-sm shadow-2xl">
+    <Card className="bg-card border-border backdrop-blur-sm">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-500/20 rounded-lg">
-              <Wallet className="h-5 w-5 text-blue-400" />
+            <div className="p-2 bg-primary/20 rounded-lg">
+              <Wallet className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-white">
+              <h2 className="text-xl font-semibold text-foreground">
                 {formatCurrency(portfolioData.totalValue)}
               </h2>
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-muted-foreground">
                 across {portfolioData.walletCount} wallet
                 {portfolioData.walletCount !== 1 ? "s" : ""} •{" "}
                 {portfolioData.chainCount} chain
@@ -63,13 +68,13 @@ export const BalancesCard = () => {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-muted-foreground">
               Last updated: {portfolioData.lastUpdated}
             </span>
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-gray-400 hover:text-white hover:bg-gray-800/50"
+              className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted"
               onClick={handleRefresh}
               disabled={isRefreshing}
             >
@@ -84,7 +89,7 @@ export const BalancesCard = () => {
       <CardContent className="space-y-6">
         {/* Chain Distribution */}
         <div>
-          <h3 className="text-sm font-medium text-gray-300 mb-3">
+          <h3 className="text-sm font-medium text-foreground mb-3">
             Chain Distribution
           </h3>
           <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
@@ -94,8 +99,8 @@ export const BalancesCard = () => {
                   key={chain.name}
                   className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors cursor-pointer group flex-shrink-0 min-w-fit select-none ${
                     selectedChain === chain.name
-                      ? "bg-blue-500/20 border-blue-500/50"
-                      : "bg-gray-800/50 border-gray-700/50 hover:border-gray-600/50"
+                      ? "bg-primary/20 border-primary/50"
+                      : "bg-muted/50 border-border hover:border-muted-foreground/50"
                   }`}
                   onClick={() => handleChainClick(chain.name)}
                 >
@@ -109,16 +114,16 @@ export const BalancesCard = () => {
                   <span
                     className={`text-sm font-medium whitespace-nowrap ${
                       selectedChain === chain.name
-                        ? "text-blue-300"
-                        : "text-white group-hover:text-gray-200"
+                        ? "text-primary"
+                        : "text-foreground group-hover:text-foreground"
                     }`}
                   >
                     {chain.name}
                   </span>
-                  <span className="text-xs text-gray-400 whitespace-nowrap">
+                  <span className="text-xs text-muted-foreground whitespace-nowrap">
                     {chain.percentage}%
                   </span>
-                  <ChevronRight className="h-3 w-3 text-gray-500 group-hover:text-gray-400 flex-shrink-0" />
+                  <ChevronRight className="h-3 w-3 text-muted-foreground group-hover:text-foreground flex-shrink-0" />
                 </div>
               )
             )}
@@ -127,7 +132,7 @@ export const BalancesCard = () => {
 
         {/* Top Holdings / Filtered Tokens */}
         <div>
-          <h3 className="text-sm font-medium text-gray-300 mb-3 flex items-center gap-2">
+          <h3 className="text-sm font-medium text-foreground mb-3 flex items-center gap-2">
             {selectedChain ? (
               <>
                 <img
@@ -138,7 +143,7 @@ export const BalancesCard = () => {
                 {selectedChain} Tokens
                 <button
                   onClick={() => selectChain(null)}
-                  className="text-xs text-blue-400 hover:text-blue-300 ml-auto"
+                  className="text-xs text-primary hover:text-primary/80 ml-auto"
                 >
                   View All
                 </button>
@@ -155,7 +160,7 @@ export const BalancesCard = () => {
                   className="flex items-center justify-between"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-white">
+                    <span className="text-sm font-medium text-foreground">
                       {holding.symbol}
                     </span>
                     {/* Only show chain icon if viewing all holdings */}
@@ -167,11 +172,11 @@ export const BalancesCard = () => {
                         title={holding.chainName}
                       />
                     )}
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-muted-foreground">
                       {holding.percentage}%
                     </span>
                   </div>
-                  <span className="text-sm text-gray-300">
+                  <span className="text-sm text-foreground">
                     {formatCurrency(holding.value)}
                   </span>
                 </div>
