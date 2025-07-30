@@ -61,7 +61,13 @@ export const TransactionList = ({
     return tx.type.toLowerCase() === filterType.toLowerCase();
   });
 
-  const uniqueTypes = Array.from(new Set(allTransactions.map((tx) => tx.type)));
+  const uniqueTypes = Array.from(new Set(allTransactions.map((tx) => tx.type)))
+    .map((type) => ({
+      type,
+      count: transactions.filter((tx) => tx.type === type).length,
+    }))
+    .sort((a, b) => b.count - a.count)
+    .map((item) => item.type);
 
   const handleChainClick = (chainId: string) => {
     if (selectedChainId === chainId) {
@@ -220,29 +226,7 @@ export const TransactionList = ({
                   : "bg-gray-800/50 text-gray-400 hover:text-white"
               }`}
             >
-              All ({transactions.length})
-            </button>
-            <button
-              onClick={() => setFilterType("in")}
-              className={`px-3 py-1 rounded-full text-xs whitespace-nowrap transition-colors ${
-                filterType === "in"
-                  ? "bg-green-500/20 text-green-300 border border-green-500/50"
-                  : "bg-gray-800/50 text-gray-400 hover:text-white"
-              }`}
-            >
-              Received (
-              {transactions.filter((tx) => tx.direction === "in").length})
-            </button>
-            <button
-              onClick={() => setFilterType("out")}
-              className={`px-3 py-1 rounded-full text-xs whitespace-nowrap transition-colors ${
-                filterType === "out"
-                  ? "bg-red-500/20 text-red-300 border border-red-500/50"
-                  : "bg-gray-800/50 text-gray-400 hover:text-white"
-              }`}
-            >
-              Sent ({transactions.filter((tx) => tx.direction === "out").length}
-              )
+              All {transactions.length}
             </button>
             {uniqueTypes.map((type) => (
               <button
@@ -254,7 +238,7 @@ export const TransactionList = ({
                     : "bg-gray-800/50 text-gray-400 hover:text-white"
                 }`}
               >
-                {type} ({transactions.filter((tx) => tx.type === type).length})
+                {type} {transactions.filter((tx) => tx.type === type).length}
               </button>
             ))}
           </div>

@@ -79,11 +79,35 @@ export const processTransactionHistory = (
       direction = "out";
     }
 
+    // Normalize transaction types to avoid duplicates
+    let normalizedType = details.type;
+    switch (details.type.toLowerCase()) {
+      case "sent":
+      case "send":
+        normalizedType = "Send";
+        break;
+      case "received":
+      case "receive":
+        normalizedType = "Receive";
+        break;
+      case "limitorderfill":
+        normalizedType = "LimitOrderFill";
+        break;
+      case "approve":
+        normalizedType = "Approve";
+        break;
+      default:
+        // Capitalize first letter for consistency
+        normalizedType =
+          details.type.charAt(0).toUpperCase() +
+          details.type.slice(1).toLowerCase();
+    }
+
     return {
       id: item.id,
       hash: details.txHash,
       timestamp: item.timeMs,
-      type: details.type,
+      type: normalizedType,
       direction,
       chainId: details.chainId,
       chainName: getChainName(details.chainId),

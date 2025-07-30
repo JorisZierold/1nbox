@@ -108,7 +108,6 @@ export interface ProcessedTransaction {
   amount: string;
   symbol: string;
   formattedAmount: string;
-  usdValue?: number;
   fee: string;
   formattedFee: string;
   status: string;
