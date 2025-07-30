@@ -19,6 +19,7 @@ import { EmptyState } from "@/components/inbox/EmptyState";
 import { ConnectWalletState } from "@/components/inbox/ConnectWalletState";
 import { BalancesCard } from "@/components/inbox/balance/BalancesCard";
 import { useAppKitAccount } from "@reown/appkit/react";
+import { TransactionHistory } from "@/components/history/TransactionHistory";
 
 const allActions = [
   ...securityActions,
@@ -82,6 +83,9 @@ export default function InboxPage() {
             {isWalletConnected && (
               <div className="px-6 pb-6">
                 <BalancesCard />
+                <div className="mb-8" />
+                <TransactionHistory />
+                <div className="mb-8" />
               </div>
             )}
 

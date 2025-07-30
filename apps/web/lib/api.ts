@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import { oneInchQueue } from "./request-queue";
-import type { OneInchTokenMetadata } from "./types";
+import type { OneInchTokenMetadata, HistoryResponse } from "./types";
 
 interface ApiResponse<T> {
   data: T;
@@ -89,6 +89,36 @@ class ApiService {
         console.error("Token metadata error:", error);
         throw new Error(
           `Failed to fetch metadata: ${
+            error.response?.data?.error || error.message
+          }`
+        );
+      }
+    });
+  }
+
+  async getTransactionHistory(
+    address: string,
+    chainId?: string,
+    limit?: number
+  ): Promise<HistoryResponse> {
+    return oneInchQueue.add(async () => {
+      try {
+        console.log(`Fetching history for ${address}`);
+
+        const params = new URLSearchParams();
+        if (chainId) params.append("chainId", chainId);
+        if (limit) params.append("limit", limit.toString());
+
+        const response = await this.client.get(
+          `/history/${address}?${params.toString()}`
+        );
+
+        console.log("History response:", response.data);
+        return response.data as HistoryResponse;
+      } catch (error: any) {
+        console.error("History fetch error:", error);
+        throw new Error(
+          `Failed to fetch transaction history: ${
             error.response?.data?.error || error.message
           }`
         );

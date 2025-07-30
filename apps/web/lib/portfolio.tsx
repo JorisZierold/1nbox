@@ -224,7 +224,7 @@ export const getAnomalyColor = (anomaly: string) => {
 };
 
 export function formatTokenBalance(balance: string, decimals: number): number {
-  const balanceBN = BigInt(balance);
+  const balanceBN = BigInt(balance || "0");
   const divisor = BigInt(10 ** decimals);
   const wholePart = balanceBN / divisor;
   const fractionalPart = balanceBN % divisor;
