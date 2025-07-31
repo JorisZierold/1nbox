@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Layers } from "lucide-react";
-import type { Action } from "@/lib/types";
+import type { Action } from "@/types";
 import {
   securityActions,
   utilityActions,
@@ -20,7 +20,7 @@ import { BalancesCard } from "@/components/inbox/balance/BalancesCard";
 import { useAppKitAccount } from "@reown/appkit/react";
 import { TransactionHistory } from "@/components/history/TransactionHistory";
 import { SplashScreen } from "@/components/intro/SplashScreen";
-import { useWalletStore } from "@/lib/stores/wallet-store";
+import { useWalletStore } from "@/hooks/store/wallet-store";
 
 const allActions = [
   ...securityActions,

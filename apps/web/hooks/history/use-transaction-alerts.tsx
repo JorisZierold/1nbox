@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { transactionAlertsDB } from "@/lib/transaction-alerts";
-import { ProcessedTransaction } from "@/lib/types";
+import { ProcessedTransaction } from "@/types";
 
 export const useTransactionAlerts = (transactions: ProcessedTransaction[]) => {
   const [unseenTransactionIds, setUnseenTransactionIds] = useState<Set<string>>(

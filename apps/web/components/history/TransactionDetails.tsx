@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ExternalLink, Copy, Hash, Users } from "lucide-react";
-import { ProcessedTransaction } from "@/lib/types";
+import { ProcessedTransaction } from "@/types";
 import { getChainIcon, getExplorerUrl, getExplorerName } from "@/lib/chains";
 import { formatRelativeTime } from "@/lib/history";
 

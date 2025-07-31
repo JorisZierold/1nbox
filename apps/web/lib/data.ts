@@ -1,4 +1,4 @@
-import type { Action, Category } from "./types";
+import type { Action, Category } from "../types";
 import {
   Layers,
   Shield,

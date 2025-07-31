@@ -10,7 +10,7 @@ import {
   CheckCheck,
   AlertCircle,
 } from "lucide-react";
-import { ProcessedTransaction } from "@/lib/types";
+import { ProcessedTransaction } from "@/types";
 import { TransactionItem } from "./TransactionItem";
 import { TransactionDetails } from "./TransactionDetails";
 import { getChainIcon } from "@/lib/chains";

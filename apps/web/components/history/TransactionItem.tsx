@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Copy } from "lucide-react";
-import { ProcessedTransaction } from "@/lib/types";
+import { ProcessedTransaction } from "@/types";
 import { getChainIcon, getExplorerUrl } from "@/lib/chains";
 import { getTransactionTypeIcon, formatRelativeTime } from "@/lib/history";
 

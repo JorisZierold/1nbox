@@ -4,19 +4,24 @@ import {
   priceQueue,
   metadataQueue,
   historyQueue,
-} from "./request-queue";
-import type { OneInchTokenMetadata, HistoryResponse } from "./types";
+} from "../request-queue";
+import type {
+  OneInchTokenMetadata,
+  HistoryResponse,
+  BalanceResponse,
+  PriceResponse,
+} from "./types";
+import { ChainId } from "../wagmi-config";
 
-interface ApiResponse<T> {
-  data: T;
-  status: number;
-}
-
-class ApiService {
-  private client: AxiosInstance;
+/**
+ * OneInch API service for fetching blockchain data
+ * Routes requests through internal API endpoints for rate limiting and caching
+ */
+class OneInchApiService {
+  private httpClient: AxiosInstance;
 
   constructor() {
-    this.client = axios.create({
+    this.httpClient = axios.create({
       baseURL: "/api",
       headers: {
         "Content-Type": "application/json",
@@ -24,8 +29,11 @@ class ApiService {
       timeout: 15000,
     });
 
-    // Add response interceptor for better error handling
-    this.client.interceptors.response.use(
+    this.setupErrorHandling();
+  }
+
+  private setupErrorHandling() {
+    this.httpClient.interceptors.response.use(
       (response: any) => response,
       (error: any) => {
         console.error("API Error:", error.response?.data || error.message);
@@ -34,12 +42,15 @@ class ApiService {
     );
   }
 
-  async getWalletBalances(chainId: string, address: string): Promise<any> {
+  async getWalletBalances(
+    chainId: ChainId,
+    address: string
+  ): Promise<BalanceResponse> {
     return balanceQueue.add(async () => {
       try {
         console.log(`Fetching balances for ${address} on chain ${chainId}`);
 
-        const response = await this.client.get(
+        const response = await this.httpClient.get(
           `/balances/${chainId}/${address}`
         );
 
@@ -56,7 +67,10 @@ class ApiService {
     });
   }
 
-  async getTokenPrices(chainId: string, tokens: string[]): Promise<any> {
+  async getTokenPrices(
+    chainId: ChainId,
+    tokens: string[]
+  ): Promise<PriceResponse> {
     return priceQueue.add(async () => {
       try {
         // Always return empty object if no tokens provided
@@ -69,7 +83,7 @@ class ApiService {
 
         console.log(`Fetching prices for tokens on chain ${chainId}:`, tokens);
 
-        const response = await this.client.post(`/prices/${chainId}`, {
+        const response = await this.httpClient.post(`/prices/${chainId}`, {
           params: {
             tokens: tokens.filter(
               (token) => token && typeof token === "string"
@@ -100,12 +114,12 @@ class ApiService {
     });
   }
 
-  async getTokenMetadata(chainId: string): Promise<OneInchTokenMetadata> {
+  async getTokenMetadata(chainId: ChainId): Promise<OneInchTokenMetadata> {
     return metadataQueue.add(async () => {
       try {
         console.log(`Fetching metadata for chain ${chainId}`);
 
-        const response = await this.client.get(`/token/${chainId}`);
+        const response = await this.httpClient.get(`/token/${chainId}`);
         return response.data as OneInchTokenMetadata;
       } catch (error: any) {
         console.error("Token metadata error:", error);
@@ -120,7 +134,7 @@ class ApiService {
 
   async getTransactionHistory(
     address: string,
-    chainId?: string,
+    chainId?: ChainId,
     limit?: number
   ): Promise<HistoryResponse> {
     return historyQueue.add(async () => {
@@ -128,10 +142,10 @@ class ApiService {
         console.log(`Fetching history for ${address}`);
 
         const params = new URLSearchParams();
-        if (chainId) params.append("chainId", chainId);
+        if (chainId) params.append("chainId", chainId.toString());
         if (limit) params.append("limit", limit.toString());
 
-        const response = await this.client.get(
+        const response = await this.httpClient.get(
           `/history/${address}?${params.toString()}`
         );
 
@@ -149,4 +163,4 @@ class ApiService {
   }
 }
 
-export default new ApiService();
+export default new OneInchApiService();

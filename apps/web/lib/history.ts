@@ -1,5 +1,5 @@
 import { formatTokenBalance } from "./portfolio";
-import { HistoryItem, ProcessedTransaction } from "./types";
+import { HistoryItem, ProcessedTransaction } from "../types";
 import { networks } from "./wagmi-config";
 
 const NATIVE_TOKEN_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";

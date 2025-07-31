@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+
 export type ActionTagType = "risk" | "attention" | "opportunity" | "sponsored";
 
 export interface Action {
@@ -36,67 +37,7 @@ export interface Wallet {
   selected?: boolean;
 }
 
-export interface OneInchTokenMetadata {
-  [address: string]: {
-    chainId: number;
-    symbol: string;
-    name: string;
-    address: string;
-    decimals: number;
-    logoURI: string;
-    providers: string[];
-    eip2612: boolean;
-    isFoT: boolean;
-    tags: string[];
-  };
-}
-
-// Add History Types
-export interface TokenAction {
-  chainId: string;
-  address: string;
-  standard: string;
-  fromAddress: string;
-  toAddress: string;
-  amount: string;
-  direction: "In" | "Out";
-}
-
-export interface TransactionDetails {
-  txHash: string;
-  chainId: number;
-  blockNumber: number;
-  blockTimeSec: number;
-  status: string;
-  type: string;
-  tokenActions: TokenAction[];
-  fromAddress: string;
-  toAddress: string;
-  nonce: number;
-  orderInBlock: number;
-  feeInSmallestNative: string;
-  meta?: {
-    protocol?: string;
-    safeAddress?: string;
-  };
-}
-
-export interface HistoryItem {
-  timeMs: number;
-  address: string;
-  type: number;
-  rating: string;
-  direction: "in" | "out";
-  details: TransactionDetails;
-  id: string;
-  eventOrderInTransaction: number;
-}
-
-export interface HistoryResponse {
-  items: HistoryItem[];
-  cache_counter: number;
-}
-
+// Processed transaction types for UI consumption
 export interface ProcessedTransaction {
   id: string;
   hash: string;
@@ -114,4 +55,11 @@ export interface ProcessedTransaction {
   fromAddress: string;
   toAddress: string;
   protocol?: string;
+}
+
+export interface ChainStats {
+  chainId: number;
+  chainName: string;
+  count: number;
+  totalTransactions: number;
 }

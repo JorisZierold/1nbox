@@ -1,5 +1,5 @@
 import { useQueries } from "@tanstack/react-query";
-import apiService from "@/lib/api";
+import apiService from "@/lib/oneinch/api";
 import { networks } from "@/lib/wagmi-config";
 import { queryKeys, STALE_TIME } from "@/lib/query-config";
 

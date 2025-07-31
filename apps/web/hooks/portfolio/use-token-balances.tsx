@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useQueries } from "@tanstack/react-query";
 import { useAppKitAccount } from "@reown/appkit/react";
-import apiService from "@/lib/api";
+import apiService from "@/lib/oneinch/api";
 import { useTokenMetadata } from "./use-token-metadata";
 import { queryKeys, STALE_TIME } from "@/lib/query-config";
 

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Plus, WalletIcon, LayoutGrid, LogOut } from "lucide-react";
 import { useAppKit, useAppKitAccount } from "@reown/appkit/react";
-import { useWalletStore } from "@/lib/stores/wallet-store";
+import { useWalletStore } from "@/hooks/store/wallet-store";
 import { useConnections, useDisconnect } from "wagmi";
 
 export function WalletsSection() {

@@ -1,6 +1,6 @@
 "use client";
 
-import type { Action } from "@/lib/types";
+import type { Action } from "@/types";
 import { PieChart, Shield, Zap } from "lucide-react";
 import { ActionItem } from "./ActionItem";
 

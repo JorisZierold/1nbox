@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { ProcessedTransaction } from "@/lib/types";
+import { ProcessedTransaction } from "@/types";
 import { processTransactionHistory } from "@/lib/history";
 import { useTransactionData } from "./use-transaction-data";
 import { useDebounce } from "../use-debounce";
@@ -12,7 +12,7 @@ interface ChainStats {
   percentage: number;
 }
 
-  export const useTransactionHistory = (
+export const useTransactionHistory = (
   selectedChainId?: string,
   limit?: number
 ) => {

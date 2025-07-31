@@ -36,6 +36,8 @@ export const networks = [
   bsc,
 ] as [AppKitNetwork, ...AppKitNetwork[]];
 
+export type ChainId = (typeof networks)[number]["id"];
+
 export const wagmiAdapter = new WagmiAdapter({
   ssr: true,
   projectId,

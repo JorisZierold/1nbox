@@ -1,6 +1,6 @@
 "use client";
 
-import type { Action } from "@/lib/types";
+import type { Action } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 

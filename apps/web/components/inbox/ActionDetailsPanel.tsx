@@ -10,7 +10,7 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { WalletIcon, Info, Lightbulb } from "lucide-react";
-import type { Action } from "@/lib/types";
+import type { Action } from "@/types";
 
 interface ActionDetailsPanelProps {
   selectedAction: Action | null;
