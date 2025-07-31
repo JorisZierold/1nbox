@@ -37,8 +37,8 @@ export function ThemeToggle() {
   }
 
   const themes = [
-    { name: "light", label: "Light", icon: Sun },
     { name: "dark", label: "Dark", icon: Moon },
+    { name: "light", label: "Light", icon: Sun },
     { name: "ocean", label: "Ocean", icon: Waves },
     { name: "sunset", label: "Sunset", icon: Sunset },
     { name: "rose", label: "Rose", icon: Heart },
