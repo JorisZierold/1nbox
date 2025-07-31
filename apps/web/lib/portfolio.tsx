@@ -45,7 +45,8 @@ export const processPortfolioData = async (
   balances: Record<string, any>,
   prices: Record<string, any>,
   metadata: Record<string, any>,
-  supportedChains: SupportedChain[]
+  supportedChains: SupportedChain[],
+  lastDataUpdate?: Date | null
 ): Promise<PortfolioData> => {
   const chainBalances: ChainBalance[] = [];
   const allHoldings: TopHolding[] = [];
@@ -193,7 +194,21 @@ export const processPortfolioData = async (
     chainBalances,
     topHoldings: sortedHoldings,
     allTokens,
-    lastUpdated: new Date().toLocaleTimeString(),
+    lastUpdated: lastDataUpdate
+      ? lastDataUpdate.toLocaleString("en-US", {
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        })
+      : new Date().toLocaleString("en-US", {
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        }),
   };
 };
 

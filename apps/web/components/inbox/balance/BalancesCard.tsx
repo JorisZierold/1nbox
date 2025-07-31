@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { RefreshCw, ChevronRight, Wallet } from "lucide-react";
-import { useBalances } from "@/hooks/use-balances";
+import { usePortfolio } from "@/hooks/portfolio";
 import { getChainIcon } from "@/lib/chains";
 import {
   ChainBalance,
@@ -22,12 +22,9 @@ export const BalancesCard = () => {
     selectedChain,
     selectChain,
     filteredTokens,
-  } = useBalances();
+    error,
+  } = usePortfolio();
   const [isRefreshing, setIsRefreshing] = useState(false);
-
-  if (isLoading) {
-    return <BalancesCardSkeleton />;
-  }
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -43,8 +40,46 @@ export const BalancesCard = () => {
     }
   };
 
-  if (!isConnected || !portfolioData) {
+  // Don't show anything if not connected
+  if (!isConnected) {
     return null;
+  }
+
+  // Show loading skeleton while loading
+  if (isLoading) {
+    return <BalancesCardSkeleton />;
+  }
+
+  // Show empty state if no portfolio data (but connected)
+  if (!portfolioData) {
+    return (
+      <Card className="bg-card border-border backdrop-blur-sm">
+        <CardContent className="py-8">
+          <div className="text-center">
+            <Wallet className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-foreground mb-2">
+              No Balances Found
+            </h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              {error
+                ? `Error loading balances: ${error}`
+                : "No tokens found in your connected wallets."}
+            </p>
+            <Button
+              variant="outline"
+              onClick={handleRefresh}
+              disabled={isRefreshing}
+              className="gap-2"
+            >
+              <RefreshCw
+                className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
+              />
+              {isRefreshing ? "Refreshing..." : "Retry"}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
   }
 
   return (

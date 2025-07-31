@@ -4,6 +4,7 @@ interface RateLimit {
   intervalCap: number;
   interval: number;
   timeout?: number;
+  concurrency?: number;
 }
 
 export class RequestQueue {
@@ -11,7 +12,7 @@ export class RequestQueue {
 
   constructor(public identifier: string, public rateLimit: RateLimit) {
     this.pQueue = new PQueue({
-      concurrency: 1,
+      concurrency: rateLimit.concurrency ?? 1,
       interval: rateLimit.interval,
       intervalCap: rateLimit.intervalCap,
       timeout: rateLimit.timeout ?? 30000,
@@ -23,9 +24,19 @@ export class RequestQueue {
   }
 }
 
-// Create a singleton instance for 1inch API requests
-export const oneInchQueue = new RequestQueue("1inch-api", {
-  intervalCap: 4, // 1 request
-  interval: 1100, // per 1.1 seconds (slightly over 1 RPS)
-  timeout: 30000, // 30 second timeout
-});
+// Create specialized queues for different 1inch API endpoints
+// Simplified settings - same config for all queues
+const queueConfig = {
+  intervalCap: 2,
+  interval: 1200,
+  concurrency: 1,
+  timeout: 20000,
+};
+
+export const balanceQueue = new RequestQueue("1inch-balances", queueConfig);
+
+export const priceQueue = new RequestQueue("1inch-prices", queueConfig);
+
+export const metadataQueue = new RequestQueue("1inch-metadata", queueConfig);
+
+export const historyQueue = new RequestQueue("1inch-history", queueConfig);

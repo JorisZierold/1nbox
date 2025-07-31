@@ -74,11 +74,24 @@ export async function POST(
 ) {
   try {
     const { chainId } = await params;
-    const body = await request.json();
-    const { tokens, currency = "USD" } = body.params;
-    if (!tokens || !Array.isArray(tokens)) {
+
+    // Safely parse JSON with error handling
+    let body;
+    try {
+      body = await request.json();
+    } catch (error) {
+      console.error("Price API error: Invalid JSON body:", error);
       return NextResponse.json(
-        { error: "Tokens array required" },
+        { error: "Invalid JSON in request body" },
+        { status: 400 }
+      );
+    }
+
+    // Safely extract params
+    const { tokens, currency = "USD" } = body?.params || {};
+    if (!tokens || !Array.isArray(tokens) || tokens.length === 0) {
+      return NextResponse.json(
+        { error: "Valid tokens array required" },
         { status: 400 }
       );
     }
