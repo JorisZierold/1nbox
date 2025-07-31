@@ -20,6 +20,7 @@ import { BalancesCard } from "@/components/inbox/balance/BalancesCard";
 import { useAppKitAccount } from "@reown/appkit/react";
 import { TransactionHistory } from "@/components/history/TransactionHistory";
 import { SplashScreen } from "@/components/intro/SplashScreen";
+import { useWalletStore } from "@/lib/stores/wallet-store";
 
 const allActions = [
   ...securityActions,
@@ -37,8 +38,7 @@ export default function InboxPage() {
   const [splashed, setSplashed] = useState(false);
   const [selectedAction, setSelectedAction] = useState<Action | null>(null);
   const [selectedChain, setSelectedChain] = useState("All");
-  const [selectedSidebarWallet, setSelectedSidebarWallet] =
-    useState("Main Wallet");
+  const { selectedWallet, setSelectedWallet } = useWalletStore();
   const { isConnected: isWalletConnected } = useAppKitAccount();
 
   const handleActionClick = (action: Action) => {
@@ -53,8 +53,8 @@ export default function InboxPage() {
     return actions.filter(
       (action) =>
         (selectedChain === "All" || action.chainName === selectedChain) &&
-        (selectedSidebarWallet === "All Wallets" ||
-          action.walletName === selectedSidebarWallet)
+        (selectedWallet === "All Wallets" ||
+          action.walletName === selectedWallet)
     );
   };
 
@@ -73,10 +73,7 @@ export default function InboxPage() {
   return (
     <div className="bg-background text-foreground min-h-screen">
       <div className="flex flex-col lg:flex-row lg:h-screen">
-        <Sidebar
-          selectedSidebarWallet={selectedSidebarWallet}
-          onWalletSelect={setSelectedSidebarWallet}
-        />
+        <Sidebar />
 
         {/* Main scrollable area */}
         <div className="flex-1 flex flex-col lg:overflow-y-auto bg-background">

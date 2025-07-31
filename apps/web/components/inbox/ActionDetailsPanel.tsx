@@ -52,18 +52,7 @@ export function ActionDetailsPanel({
               className="flex items-center gap-2 bg-gray-900/50 border-gray-700 text-gray-300"
             >
               <WalletIcon className="h-4 w-4 text-gray-400" />
-              {selectedAction ? selectedAction.walletName : ""}
-            </Badge>
-            <Badge
-              variant="outline"
-              className={`flex items-center gap-2 bg-gray-900/50 border-gray-700 text-gray-300 ${
-                selectedAction ? selectedAction.chainColor : ""
-              }`}
-            >
-              {selectedAction && selectedAction.chainIcon && (
-                <selectedAction.chainIcon className="h-4 w-4" />
-              )}
-              {selectedAction ? selectedAction.chainName : ""}
+              {selectedAction ? "selectedAction.walletName" : "no wallet"}
             </Badge>
           </div>
         </SheetHeader>
