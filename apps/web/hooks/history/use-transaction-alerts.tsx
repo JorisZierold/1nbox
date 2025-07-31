@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { transactionAlertsDB } from "@/lib/transaction-alerts";
 import { ProcessedTransaction } from "@/lib/types";
 
@@ -94,6 +94,15 @@ export const useTransactionAlerts = (transactions: ProcessedTransaction[]) => {
   useEffect(() => {
     checkUnseenTransactions();
   }, [checkUnseenTransactions]);
+
+  const transactionIds = useMemo(
+    () => transactions?.map((tx) => tx.id).join(",") || "",
+    [transactions]
+  );
+
+  useEffect(() => {
+    checkUnseenTransactions();
+  }, [transactionIds, checkUnseenTransactions]);
 
   return {
     unseenTransactionIds,

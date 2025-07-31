@@ -8,8 +8,8 @@ export const queryKeys = {
   prices: (chainId: string, tokens: string[]) =>
     ["prices", chainId, tokens.sort()] as const,
   metadata: (chainId: string) => ["metadata", chainId] as const,
-  history: (address: string, chainId?: string) =>
-    ["history", address, chainId] as const,
+  history: (address: string, chainId: string, limit: number) =>
+    ["history", address, chainId, limit] as const,
 };
 
 // Cache time constants

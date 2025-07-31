@@ -8,13 +8,14 @@ import {
   Filter,
   ChevronRight,
   CheckCheck,
+  AlertCircle,
 } from "lucide-react";
 import { ProcessedTransaction } from "@/lib/types";
 import { TransactionItem } from "./TransactionItem";
 import { TransactionDetails } from "./TransactionDetails";
 import { getChainIcon } from "@/lib/chains";
 import { TransactionSkeleton } from "./TransactionSkeleton";
-import { useTransactionAlerts } from "@/hooks/use-transaction-alerts";
+import { useTransactionAlerts } from "@/hooks/history";
 
 interface ChainStats {
   chainId: string;
@@ -28,9 +29,11 @@ interface TransactionListProps {
   allTransactions: ProcessedTransaction[];
   chainStats: ChainStats[];
   isLoading: boolean;
+  error?: string | null;
   onRefresh: () => void;
   selectedChainId?: string;
   onChainSelect?: (chainId: string | null) => void;
+  lastUpdated?: Date | null;
 }
 
 export const TransactionList = ({
@@ -38,9 +41,11 @@ export const TransactionList = ({
   allTransactions,
   chainStats,
   isLoading,
+  error,
   onRefresh,
   selectedChainId,
   onChainSelect,
+  lastUpdated,
 }: TransactionListProps) => {
   const [selectedTransaction, setSelectedTransaction] =
     useState<ProcessedTransaction | null>(null);
@@ -112,37 +117,94 @@ export const TransactionList = ({
                       {unseenCount} new
                     </Badge>
                   )}
+                  {/* Add error indicator */}
+                  {error && (
+                    <Badge variant="destructive" className="text-xs">
+                      Error - data may be stale
+                    </Badge>
+                  )}
                 </div>
               </div>
             </div>
 
-            <div className="flex gap-2">
-              {/* Add mark all as seen button */}
-              {unseenCount > 0 && (
-                <Button
-                  onClick={markAllAsSeen}
-                  variant="outline"
-                  size="sm"
-                  className="h-8 text-xs"
-                >
-                  <CheckCheck className="h-3 w-3 mr-1" />
-                  Mark all as seen
-                </Button>
-              )}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-accent"
-                onClick={onRefresh}
-                disabled={isLoading}
-              >
-                <RefreshCw
-                  className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
-                />
-              </Button>
+            <div className="flex items-center justify-end gap-3">
+              {/* Button container */}
+              <div className="flex flex-col gap-2 items-end">
+                <div className="flex items-center gap-2">
+                  {/* Last updated timestamp - only show if available */}
+                  {lastUpdated && (
+                    <span className="text-xs text-muted-foreground">
+                      Last updated:{" "}
+                      {lastUpdated.toLocaleString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                      })}
+                    </span>
+                  )}
+                  {/* Refresh button */}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-accent"
+                    onClick={onRefresh}
+                    disabled={isLoading}
+                  >
+                    <RefreshCw
+                      className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
+                    />
+                  </Button>
+                </div>
+
+                {/* Mark all as seen button - appears under refresh */}
+                {unseenCount > 0 && (
+                  <Button
+                    onClick={markAllAsSeen}
+                    variant="outline"
+                    size="sm"
+                    className="h-8 text-xs whitespace-nowrap"
+                  >
+                    <CheckCheck className="h-3 w-3 mr-1" />
+                    Mark all as seen
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </CardHeader>
+
+        {/* Add error banner below header */}
+        {error && (
+          <div className="mt-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 text-destructive" />
+                <div>
+                  <p className="text-sm font-medium text-destructive">
+                    Failed to refresh transaction history
+                  </p>
+                  <p className="text-xs text-destructive/80">
+                    {error}. Showing previously loaded data.
+                  </p>
+                </div>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onRefresh}
+                disabled={isLoading}
+                className="text-destructive border-destructive/50 hover:bg-destructive/10"
+              >
+                <RefreshCw
+                  className={`h-3 w-3 mr-1 ${isLoading ? "animate-spin" : ""}`}
+                />
+                Retry
+              </Button>
+            </div>
+          </div>
+        )}
 
         <CardContent className="space-y-6">
           {/* Chain Distribution */}
@@ -249,7 +311,7 @@ export const TransactionList = ({
 
           {/* Transaction List */}
           <div className="space-y-2 max-h-96 overflow-y-auto">
-            {isLoading ? (
+            {isLoading && allTransactions.length === 0 ? (
               <>
                 <TransactionSkeleton />
                 <TransactionSkeleton />
@@ -263,9 +325,36 @@ export const TransactionList = ({
                   isUnseen={isTransactionUnseen(transaction.id)}
                 />
               ))
+            ) : allTransactions.length === 0 ? (
+              // Only show "no transactions" if we truly have no data
+              <div className="text-center py-8">
+                <div className="text-muted-foreground">
+                  {error ? (
+                    <div className="space-y-3">
+                      <p>Failed to load transaction history</p>
+                      <Button
+                        variant="outline"
+                        onClick={onRefresh}
+                        disabled={isLoading}
+                        className="gap-2"
+                      >
+                        <RefreshCw
+                          className={`h-4 w-4 ${
+                            isLoading ? "animate-spin" : ""
+                          }`}
+                        />
+                        {isLoading ? "Retrying..." : "Retry"}
+                      </Button>
+                    </div>
+                  ) : (
+                    "No transactions found"
+                  )}
+                </div>
+              </div>
             ) : (
+              // Show "no transactions match filter" when we have data but filters don't match
               <div className="text-center py-8 text-muted-foreground">
-                No transactions found
+                No transactions match the current filter
               </div>
             )}
           </div>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useTransactionHistory } from "@/hooks/use-transaction-history";
+import { useTransactionHistory } from "@/hooks/history";
 import { TransactionList } from "./TransactionList";
 
 interface TransactionHistoryProps {
@@ -17,6 +17,7 @@ export const TransactionHistory = ({ limit = 50 }: TransactionHistoryProps) => {
     error,
     refreshHistory,
     isConnected,
+    lastTransactionUpdate,
   } = useTransactionHistory(selectedChainId || undefined, limit);
 
   if (!isConnected) {
@@ -27,23 +28,17 @@ export const TransactionHistory = ({ limit = 50 }: TransactionHistoryProps) => {
     );
   }
 
-  if (error) {
-    return (
-      <div className="text-center py-8 text-red-400">
-        Error loading transaction history: {error}
-      </div>
-    );
-  }
-
   return (
     <TransactionList
       transactions={transactions}
       allTransactions={allTransactions}
       chainStats={chainStats}
       isLoading={isLoading}
+      error={error} // Pass error to TransactionList
       onRefresh={refreshHistory}
       selectedChainId={selectedChainId || undefined}
       onChainSelect={setSelectedChainId}
+      lastUpdated={lastTransactionUpdate}
     />
   );
 };
