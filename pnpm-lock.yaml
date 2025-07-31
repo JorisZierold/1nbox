@@ -107,9 +107,15 @@ importers:
       '@reown/appkit-adapter-wagmi':
         specifier: ^1.7.16
         version: 1.7.16(@types/react@19.1.8)(@wagmi/core@2.18.0)(react@19.1.0)(typescript@5.8.3)(viem@2.33.1)(wagmi@2.16.0)(zod@3.25.76)
+      '@tanstack/query-async-storage-persister':
+        specifier: ^5.83.1
+        version: 5.83.1
       '@tanstack/react-query':
         specifier: ^5.83.0
         version: 5.83.0(react@19.1.0)
+      '@tanstack/react-query-persist-client':
+        specifier: ^5.83.1
+        version: 5.83.1(@tanstack/react-query@5.83.0)(react@19.1.0)
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.21(postcss@8.5.6)
@@ -3333,8 +3339,35 @@ packages:
       tslib: 2.8.1
     dev: false
 
+  /@tanstack/query-async-storage-persister@5.83.1:
+    resolution: {integrity: sha512-P3QzGBn9/nxaCst1hNYDQbbJDKFxTBsGTMjf0YtsKs7sSeNp7wVgUKjOVJpbvhdpFKHqTDYOdjOf2Qeb4bJ9tQ==}
+    dependencies:
+      '@tanstack/query-persist-client-core': 5.83.1
+    dev: false
+
   /@tanstack/query-core@5.83.0:
     resolution: {integrity: sha512-0M8dA+amXUkyz5cVUm/B+zSk3xkQAcuXuz5/Q/LveT4ots2rBpPTZOzd7yJa2Utsf8D2Upl5KyjhHRY+9lB/XA==}
+    dev: false
+
+  /@tanstack/query-core@5.83.1:
+    resolution: {integrity: sha512-OG69LQgT7jSp+5pPuCfzltq/+7l2xoweggjme9vlbCPa/d7D7zaqv5vN/S82SzSYZ4EDLTxNO1PWrv49RAS64Q==}
+    dev: false
+
+  /@tanstack/query-persist-client-core@5.83.1:
+    resolution: {integrity: sha512-GPWt1tj8kmo3LA1WPpSmJA3JGCdQfaggb1LheFEfr3RuwbTchWd09xD/fZ40m9ai0pJupvyguLiWF8On8sQWPw==}
+    dependencies:
+      '@tanstack/query-core': 5.83.1
+    dev: false
+
+  /@tanstack/react-query-persist-client@5.83.1(@tanstack/react-query@5.83.0)(react@19.1.0):
+    resolution: {integrity: sha512-+s1RbZ4KmkWyegSWcW0foMgn5LOBQC7W6b8zP6ab9W/n3MUpSlRqWrfnVb9y4K/jyWfdDUbuhcQfyvHrenVkcQ==}
+    peerDependencies:
+      '@tanstack/react-query': ^5.83.1
+      react: ^18 || ^19
+    dependencies:
+      '@tanstack/query-persist-client-core': 5.83.1
+      '@tanstack/react-query': 5.83.0(react@19.1.0)
+      react: 19.1.0
     dev: false
 
   /@tanstack/react-query@5.83.0(react@19.1.0):

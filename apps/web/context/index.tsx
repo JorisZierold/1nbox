@@ -1,13 +1,21 @@
 "use client";
 
 import { wagmiAdapter, projectId, networks } from "@/lib/wagmi-config";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { createAppKit } from "@reown/appkit/react";
 import React, { type ReactNode } from "react";
 import { cookieToInitialState, WagmiProvider, type Config } from "wagmi";
 import { ThemeProvider } from "next-themes";
+import {
+  createQueryClient,
+  createPersister,
+  persistOptions,
+  persistenceHandlers,
+} from "@/lib/query-config";
 
-const queryClient = new QueryClient();
+// Create instances using centralized config
+const queryClient = createQueryClient();
+const persister = createPersister();
 
 const metadata = {
   name: "1nbox",
@@ -55,7 +63,15 @@ function ContextProvider({
       config={wagmiAdapter.wagmiConfig as Config}
       initialState={initialState}
     >
-      <QueryClientProvider client={queryClient}>
+      <PersistQueryClientProvider
+        client={queryClient}
+        persistOptions={{
+          persister,
+          ...persistOptions,
+        }}
+        onSuccess={persistenceHandlers.onSuccess}
+        onError={persistenceHandlers.onError}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -66,7 +82,7 @@ function ContextProvider({
         >
           {children}
         </ThemeProvider>
-      </QueryClientProvider>
+      </PersistQueryClientProvider>
     </WagmiProvider>
   );
 }
