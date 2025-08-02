@@ -38,7 +38,7 @@ export default function InboxPage() {
           {/* Main Content */}
           <main className="flex flex-col px-6">
             {/* Header with Action Launcher */}
-            <div className="flex items-center justify-between py-4">
+            <div className="flex items-center justify-between py-1">
               <TopHeader />
             </div>
 

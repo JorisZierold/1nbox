@@ -26,7 +26,7 @@ export function Sidebar() {
                   href="#"
                   className={`flex items-center justify-between p-3 rounded-lg text-sm font-medium transition-all duration-200 ${
                     item.selected
-                      ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
+                      ? "bg-primary/5 text-primary"
                       : "text-muted-foreground hover:bg-muted hover:text-foreground"
                   }`}
                 >

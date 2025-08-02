@@ -4,7 +4,7 @@ import { Wallet } from "lucide-react";
 
 export const BalancesCardSkeleton = () => {
   return (
-    <Card className="bg-card border-border backdrop-blur-sm shadow-lg">
+    <Card className="bg-card border-border backdrop-blur-sm">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">

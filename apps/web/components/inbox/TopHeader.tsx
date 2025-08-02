@@ -1,11 +1,10 @@
-import { Button } from "@/components/ui/button";
-import { RefreshCw } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export function TopHeader() {
   return (
     <div className="flex items-center justify-between h-16 w-full">
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        {/* TODO: add last updated time 
         <span>Last updated: 2 min ago</span>
         <Button
           variant="ghost"
@@ -14,6 +13,7 @@ export function TopHeader() {
         >
           <RefreshCw className="h-4 w-4" />
         </Button>
+        */}
       </div>
 
       <div className="flex items-center gap-2">

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
 import { useSwapStore } from "@/hooks/store/swap-store";
-import { Plus } from "lucide-react";
+import { Plus, ArrowRightLeft, GitBranch, TrendingUp } from "lucide-react";
 
 export function ActionLauncher() {
   const [open, setOpen] = useState(false);
@@ -40,7 +40,7 @@ export function ActionLauncher() {
             }}
           >
             <div className="w-6 h-6 rounded bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-              <span className="text-sm">🔄</span>
+              <ArrowRightLeft className="w-3 h-3 text-blue-600 dark:text-blue-400" />
             </div>
             <div className="flex-1 text-left">
               <div className="text-sm font-medium">Quick Swap</div>
@@ -56,7 +56,7 @@ export function ActionLauncher() {
             disabled
           >
             <div className="w-6 h-6 rounded bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
-              <span className="text-sm">🌉</span>
+              <GitBranch className="w-3 h-3 text-purple-600 dark:text-purple-400" />
             </div>
             <div className="flex-1 text-left">
               <div className="text-sm font-medium flex items-center gap-2">
@@ -77,7 +77,7 @@ export function ActionLauncher() {
             disabled
           >
             <div className="w-6 h-6 rounded bg-green-100 dark:bg-green-900 flex items-center justify-center">
-              <span className="text-sm">💸</span>
+              <TrendingUp className="w-3 h-3 text-green-600 dark:text-green-400" />
             </div>
             <div className="flex-1 text-left">
               <div className="text-sm font-medium flex items-center gap-2">

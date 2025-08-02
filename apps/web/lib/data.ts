@@ -10,10 +10,10 @@ import {
 } from "lucide-react";
 
 export const categories: Category[] = [
-  { name: "All Actions", icon: Layers, count: 8, selected: true },
-  { name: "Security", icon: Shield, count: 3 },
-  { name: "Utility", icon: Zap, count: 2 },
-  { name: "Allocation", icon: PieChart, count: 3 },
+  { name: "All Actions", icon: Layers, selected: true },
+  { name: "Allocation", icon: PieChart },
+  { name: "Security", icon: Shield },
+  { name: "Utility", icon: Zap },
   { name: "History", icon: History },
 ];
 
