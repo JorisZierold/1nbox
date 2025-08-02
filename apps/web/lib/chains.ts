@@ -42,3 +42,8 @@ export const getExplorerName = (chainId: number): string => {
 
   return "Explorer";
 };
+
+export const getChainName = (chainId: number): string => {
+  const network = networks.find((n) => n.id === chainId);
+  return network?.name || `Chain ${chainId}`;
+};

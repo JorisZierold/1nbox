@@ -5,12 +5,14 @@ import Link from "next/link";
 import { categories } from "@/lib/data";
 import { Logo } from "../logo";
 import { WalletsSection } from "./WalletsSection";
+import { ActionLauncher } from "./ActionLauncher";
 
 export function Sidebar() {
   return (
     <aside className="w-full lg:w-72 bg-background/95 backdrop-blur-sm p-4 lg:p-6 lg:overflow-y-auto border-r border-border flex flex-col">
-      <header className="mb-8 flex items-center gap-3">
+      <header className="mb-8 flex flex-col items-start gap-6">
         <Logo />
+        <ActionLauncher />
       </header>
       <nav className="space-y-8 flex-1">
         <div>

@@ -1,13 +1,9 @@
 import { formatTokenBalance } from "./portfolio";
-import { HistoryItem, ProcessedTransaction } from "../types";
-import { networks } from "./wagmi-config";
+import { ProcessedTransaction } from "../types";
+import { getChainName } from "./chains";
+import { HistoryItem } from "./oneinch/types/history";
 
 const NATIVE_TOKEN_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
-
-export const getChainName = (chainId: number): string => {
-  const network = networks.find((n) => n.id === chainId);
-  return network?.name || `Chain ${chainId}`;
-};
 
 export const formatTransactionAmount = (
   amount: string,
