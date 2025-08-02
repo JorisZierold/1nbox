@@ -124,7 +124,7 @@ export const BalancesCard = () => {
       <CardContent className="space-y-6">
         {/* Chain Distribution */}
         <div>
-          <h3 className="text-sm font-medium text-foreground mb-3">
+          <h3 className="text-sm font-medium text-muted-foreground mb-3">
             Chain Distribution
           </h3>
           <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">

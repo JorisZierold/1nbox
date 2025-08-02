@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -9,6 +9,7 @@ import { X, Minus, ArrowRightLeft } from "lucide-react";
 import { TokenPicker } from "@/components/swap/TokenPicker";
 import { AmountInput } from "@/components/swap/AmountInput";
 import { ActionBar } from "@/components/swap/ActionBar";
+import { SwapChainSelector } from "@/components/swap/SwapChainSelector";
 import { useSwapTokens } from "@/hooks/swap/useSwapTokens";
 import { useQuote } from "@/hooks/swap/useQuote";
 import { useAllowance } from "@/hooks/swap/useAllowance";
@@ -37,6 +38,8 @@ export function SwapComposer() {
   const { address: account } = useAppKitAccount();
   const { caipNetworkId } = useAppKitNetwork();
 
+  const [isNetworkSwitching, setIsNetworkSwitching] = useState(false);
+
   const chainId = caipNetworkId ? parseInt(caipNetworkId.split(":")[1]) : 1;
 
   const {
@@ -52,13 +55,14 @@ export function SwapComposer() {
     handleSubmit,
     watch,
     setValue,
+    reset,
     formState: { errors, isValid },
   } = useForm<SwapFormData>({
     resolver: zodResolver(swapFormSchema),
     defaultValues: {
       amount: "",
-      fromToken: defaultTokens[1],
-      toToken: defaultTokens[0],
+      fromToken: undefined,
+      toToken: undefined,
       slippage: "0.1",
     },
     mode: "onChange",
@@ -67,11 +71,26 @@ export function SwapComposer() {
   const watchedValues = watch();
   const { amount, fromToken, toToken, slippage } = watchedValues;
 
-  // Auto-select default tokens when tokens load
-  if (defaultTokens.length >= 2 && !fromToken && !toToken) {
-    setValue("fromToken", defaultTokens[1]);
-    setValue("toToken", defaultTokens[0]);
-  }
+  // Handle chain switching
+  const handleChainSelect = async (newChainId: number) => {
+    if (newChainId === chainId) return;
+
+    setIsNetworkSwitching(true);
+    try {
+      // Reset form when chain changes
+      reset({
+        amount: "",
+        fromToken: undefined,
+        toToken: undefined,
+        slippage: "0.1",
+      });
+    } finally {
+      // Give some time for network switch to complete
+      setTimeout(() => {
+        setIsNetworkSwitching(false);
+      }, 1000);
+    }
+  };
 
   const amountUnits = useMemo(() => {
     if (!fromToken || !amount) return "0";
@@ -91,7 +110,8 @@ export function SwapComposer() {
         fromToken &&
         toToken &&
         Number(amount) > 0 &&
-        !tokensLoading
+        !tokensLoading &&
+        !isNetworkSwitching
     )
   );
 
@@ -109,24 +129,25 @@ export function SwapComposer() {
         account.length === 42 &&
         account.startsWith("0x") &&
         fromToken &&
-        fromToken.address
+        fromToken.address &&
+        !isNetworkSwitching
     ),
     amountUnits
   );
 
   const needsApprove = useMemo(() => {
-    console.log("needsApprove", {
-      allowance,
-      amountUnits,
-      fromToken,
-      hasData,
-      allowanceLoading,
-    });
-    if (!fromToken || !amountUnits) return false;
-    if (!hasData || allowanceLoading) return false; // Don't show approve until we have data
-    if (allowance === null) return false; // No data yet
+    if (!fromToken || !amountUnits || isNetworkSwitching) return false;
+    if (!hasData || allowanceLoading) return false;
+    if (allowance === null) return false;
     return allowance < BigInt(amountUnits);
-  }, [allowance, amountUnits, fromToken, hasData, allowanceLoading]);
+  }, [
+    allowance,
+    amountUnits,
+    fromToken,
+    hasData,
+    allowanceLoading,
+    isNetworkSwitching,
+  ]);
 
   async function handleApprove() {
     if (!fromToken) return;
@@ -138,7 +159,15 @@ export function SwapComposer() {
         amount: amountUnits,
       });
       await refreshAllowance();
-    } catch (e) {
+    } catch (e: any) {
+      // Don't log user rejections as errors
+      if (
+        e?.name === "TransactionExecutionError" &&
+        e?.message?.includes("User rejected")
+      ) {
+        console.log("User cancelled approval transaction");
+        return;
+      }
       console.error("Approve failed:", e);
     } finally {
       setBusy(false);
@@ -173,7 +202,15 @@ export function SwapComposer() {
 
       addPendingSwap(pendingSwap);
       closeComposer();
-    } catch (e) {
+    } catch (e: any) {
+      // Handle user rejections gracefully
+      if (
+        e?.name === "TransactionExecutionError" &&
+        e?.message?.includes("User rejected")
+      ) {
+        console.log("User cancelled swap transaction");
+        return;
+      }
       console.error("Swap failed:", e);
     } finally {
       setBusy(false);
@@ -191,9 +228,10 @@ export function SwapComposer() {
     );
   }
 
+  const isLoading = tokensLoading || isNetworkSwitching;
+
   return (
     <Card className="bg-card border-border backdrop-blur-sm relative">
-      {/* Clean header without branding */}
       <CardHeader className="pb-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -202,7 +240,6 @@ export function SwapComposer() {
             </div>
             <div>
               <h2 className="text-xl font-semibold text-foreground">Swap</h2>
-
               <div className="flex items-center gap-2">
                 <p className="text-sm text-muted-foreground">
                   Exchange tokens instantly
@@ -222,10 +259,16 @@ export function SwapComposer() {
       </CardHeader>
 
       <CardContent className="space-y-6">
-        {tokensLoading ? (
+        {/* Chain Selector */}
+        <SwapChainSelector
+          onChainSelect={handleChainSelect}
+          isLoading={isNetworkSwitching}
+        />
+
+        {isLoading ? (
           <div className="text-center py-12 text-muted-foreground">
             <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            Loading tokens...
+            {isNetworkSwitching ? "Switching network..." : "Loading tokens..."}
           </div>
         ) : (
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -326,13 +369,11 @@ export function SwapComposer() {
                     {/* Quote Results or Skeleton */}
                     <div className="p-3 bg-background/50 rounded-lg">
                       {quoting ? (
-                        // Skeleton when loading
                         <div className="animate-pulse">
                           <div className="h-8 bg-muted rounded w-32 mb-2"></div>
                           <div className="h-3 bg-muted rounded w-24"></div>
                         </div>
                       ) : quote ? (
-                        // Actual quote results
                         <>
                           <div className="text-2xl font-semibold text-foreground">
                             {quote.dstAmount
@@ -347,7 +388,6 @@ export function SwapComposer() {
                           </div>
                         </>
                       ) : (
-                        // No quote state
                         <>
                           <div className="text-2xl font-semibold text-muted-foreground">
                             0.00
@@ -380,7 +420,7 @@ export function SwapComposer() {
                 canApprove={needsApprove}
                 onApprove={handleApprove}
                 onSwap={() => handleSubmit(onSubmit)()}
-                busy={busy || quoting || tokensLoading}
+                busy={busy || quoting || isLoading}
                 disabled={!isValid}
               />
             </div>

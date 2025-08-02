@@ -15,6 +15,7 @@ export const getChainIcon = (chainName: string): string => {
     "bnb smart chain": "/chains/bnb.svg",
     gnosis: "/chains/gnosis.svg",
     linea: "/chains/linea.svg",
+    "linea mainnet": "/chains/linea.svg",
     sonic: "/chains/sonic.svg",
     unichain: "/chains/unichain.svg",
   };
