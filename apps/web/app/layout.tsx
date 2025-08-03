@@ -3,6 +3,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { headers } from "next/headers";
 import ContextProvider from "@/context";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: "1nbox",
@@ -24,7 +25,10 @@ export default async function RootLayout({
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
       <body>
-        <ContextProvider cookies={cookies}>{children}</ContextProvider>
+        <ContextProvider cookies={cookies}>
+          {children}
+          <Analytics />
+        </ContextProvider>
       </body>
     </html>
   );
