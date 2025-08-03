@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import { useTheme } from "next-themes";
+import { ExternalLink } from "lucide-react";
 
 export function SplashScreenCorner() {
   const [isPartnerModalOpen, setIsPartnerModalOpen] = useState(false);
@@ -27,7 +28,7 @@ export function SplashScreenCorner() {
       transition: {
         duration: 0.8,
         ease: easeOut,
-        delay: 2.5, 
+        delay: 2.5,
       },
     },
   };
@@ -99,8 +100,18 @@ export function SplashScreenCorner() {
 
             <div className="space-y-3">
               <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
-                <div>
-                  <h4 className="font-medium text-sm">ETHGlobal</h4>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h4 className="font-medium text-sm">ETHGlobal</h4>
+                    <a
+                      href="https://ethglobal.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
+                  </div>
                   <p className="text-xs text-muted-foreground">
                     For facilitating this incredible hackathon and bringing
                     together the largest Ethereum developer community.
@@ -112,10 +123,20 @@ export function SplashScreenCorner() {
                 <img
                   src="/1inch-logo.svg"
                   alt="1inch"
-                  className="w-6 h-6 mt-0.5"
+                  className="w-8 h-8 mt-0.5"
                 />
-                <div>
-                  <h4 className="font-medium text-sm">1inch</h4>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h4 className="font-medium text-sm">1inch</h4>
+                    <a
+                      href="https://1inch.io"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
+                  </div>
                   <p className="text-xs text-muted-foreground">
                     For sponsoring the event and providing cutting-edge DeFi
                     infrastructure that powers 1nbox.

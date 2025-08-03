@@ -5,6 +5,7 @@ import { useAppKit, useAppKitAccount } from "@reown/appkit/react";
 import { WalletCards, TrendingUp, Shield, Zap, Coins } from "lucide-react";
 import { Logo } from "../logo";
 import { DynamicSubtitle } from "../ui/dynamic-subtitle";
+import { BetaBadge } from "../ui/beta-badge";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence, easeOut } from "framer-motion";
 import { SplashScreenCorner } from "./SplashScreenCorner";
@@ -113,7 +114,10 @@ export function SplashScreen({ setSplashed }: SplashScreenProps) {
       <div className="max-w-2xl w-full text-center space-y-12">
         {/* Logo and Title */}
         <div className="space-y-6 flex flex-col items-center justify-center -mt-8">
-          <Logo size={180} />
+          <div className="relative">
+            <Logo size={180} />
+            <BetaBadge className="absolute -top-2 -right-8" size="sm" />
+          </div>
           <motion.p
             className="text-lg text-muted-foreground"
             variants={subtitleVariants}
