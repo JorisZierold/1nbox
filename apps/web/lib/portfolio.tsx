@@ -13,6 +13,11 @@ export interface TopHolding {
   percentage: number;
   chainId: string;
   chainName: string;
+  logoURI?: string;
+  balance: string;
+  price: number;
+  decimals: number;
+  tokenType: "Native" | "Stable" | "Token";
 }
 
 export interface TokenHolding {
@@ -24,6 +29,8 @@ export interface TokenHolding {
   balance: string;
   price: number;
   decimals: number;
+  tokenType: "Native" | "Stable" | "Token";
+  logoURI?: string;
 }
 
 export interface PortfolioData {
@@ -40,6 +47,38 @@ interface SupportedChain {
   id: string;
   name: string;
 }
+
+const determineTokenTypeFromTags = (
+  tags: string[] = []
+): "Native" | "Stable" | "Token" => {
+  const lowerTags = tags.map((tag) => tag.toLowerCase());
+
+  // Check for stablecoin tags
+  if (
+    lowerTags.some(
+      (tag) =>
+        tag.includes("stable") || tag.includes("usd") || tag === "stablecoin"
+    )
+  ) {
+    return "Stable";
+  }
+
+  // Check for native token tags
+  if (
+    lowerTags.some(
+      (tag) =>
+        tag.includes("native") ||
+        tag.includes("wrapped") ||
+        tag === "eth" ||
+        tag === "matic" ||
+        tag === "bnb"
+    )
+  ) {
+    return "Native";
+  }
+
+  return "Token";
+};
 
 export const processPortfolioData = async (
   balances: Record<string, any>,
@@ -84,6 +123,11 @@ export const processPortfolioData = async (
             percentage: 0, // Will be calculated later
             chainId: chain.id,
             chainName: chain.name,
+            logoURI: tokenMetadata?.assets?.logoURI || undefined,
+            balance: balance as string,
+            price,
+            decimals,
+            tokenType: determineTokenTypeFromTags(tokenMetadata?.assets?.tags),
           });
 
           // Add to allTokens array
@@ -96,6 +140,8 @@ export const processPortfolioData = async (
             balance: balance as string,
             price,
             decimals,
+            tokenType: determineTokenTypeFromTags(tokenMetadata?.assets?.tags),
+            logoURI: tokenMetadata?.assets?.logoURI || undefined,
           });
         }
       } catch (error) {
@@ -255,8 +301,8 @@ export const formatCurrency = (value: number, currency: string = "USD") => {
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: value >= 1000000 ? 1 : value >= 1000 ? 1 : 0,
+    minimumFractionDigits: 2, // Always show 2 decimal places for USD values under $1000
+    maximumFractionDigits: 2,
   });
 
   if (value >= 1000000) {

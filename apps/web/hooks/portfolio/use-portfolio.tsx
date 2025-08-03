@@ -158,6 +158,7 @@ export const usePortfolio = () => {
                   name: tokenMeta?.name || "Unknown Token",
                   decimals: tokenMeta?.decimals || 18,
                   logoURI: tokenMeta?.logoURI || null,
+                  tags: tokenMeta?.tags || [],
                 },
               };
             }

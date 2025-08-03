@@ -9,9 +9,12 @@ import {
   TopHolding,
   TokenHolding,
   formatCurrency,
+  formatTokenBalance,
 } from "@/lib/portfolio";
 import { BalanceActions } from "./BalanceActions";
 import { BalancesCardSkeleton } from "./BalancesCardSkeleton";
+import { TokenIconWithChain } from "./TokenIconWithChain";
+import { fmt } from "@/lib/formats";
 
 export const BalancesCard = () => {
   const {
@@ -187,33 +190,65 @@ export const BalancesCard = () => {
               "Top Holdings"
             )}
           </h3>
-          <div className="space-y-2">
+          <div className="space-y-3">
             {filteredTokens.map(
               (holding: TokenHolding | TopHolding, index: number) => (
                 <div
                   key={`${holding.symbol}-${holding.chainId}-${index}`}
-                  className="flex items-center justify-between"
+                  className="flex items-center justify-between p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
                 >
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-foreground">
-                      {holding.symbol}
-                    </span>
-                    {/* Only show chain icon if viewing all holdings */}
-                    {!selectedChain && (
-                      <img
-                        src={getChainIcon(holding.chainName)}
-                        alt={holding.chainName}
-                        className="w-3 h-3 object-contain flex-shrink-0"
-                        title={holding.chainName}
-                      />
-                    )}
-                    <span className="text-xs text-muted-foreground">
-                      {holding.percentage}%
-                    </span>
+                  <div className="flex items-center gap-3">
+                    <TokenIconWithChain
+                      token={holding}
+                      showChainIcon={!selectedChain}
+                    />
+
+                    <div className="flex flex-col">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-foreground">
+                          {holding.symbol}
+                        </span>
+
+                        {"tokenType" in holding && (
+                          <span className="px-1.5 py-0.5 text-xs rounded font-medium bg-muted/50 text-muted-foreground border border-border">
+                            {holding.tokenType}
+                          </span>
+                        )}
+
+                        <span className="text-xs text-muted-foreground">
+                          {holding.percentage}%
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        {"balance" in holding && (
+                          <span>
+                            {fmt.num(
+                              formatTokenBalance(
+                                holding.balance,
+                                holding.decimals
+                              ),
+                              6
+                            )}{" "}
+                            {holding.symbol}
+                          </span>
+                        )}
+
+                        {"price" in holding && holding.price > 0 && (
+                          <>
+                            <span>•</span>
+                            <span>${fmt.num(holding.price, 4)} per token</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  <span className="text-sm text-foreground">
-                    {formatCurrency(holding.value)}
-                  </span>
+
+                  <div className="text-right">
+                    <div className="text-sm font-medium text-foreground">
+                      {formatCurrency(holding.value)}
+                    </div>
+                  </div>
                 </div>
               )
             )}
