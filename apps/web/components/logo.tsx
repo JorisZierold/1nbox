@@ -6,11 +6,13 @@ interface LogoProps {
 }
 
 export const Logo = ({ size = 100 }: LogoProps) => {
-  const { theme } = useTheme();
+  const { theme, resolvedTheme } = useTheme();
+
+  const currentTheme = theme || resolvedTheme;
 
   // Dynamic logo styling based on theme
   const getLogoStyle = () => {
-    switch (theme) {
+    switch (currentTheme) {
       case "light":
         return {
           filter:
@@ -31,8 +33,14 @@ export const Logo = ({ size = 100 }: LogoProps) => {
           filter:
             "brightness(0) saturate(100%) invert(49%) sepia(85%) saturate(3661%) hue-rotate(300deg) brightness(101%) contrast(91%)",
         }; // Pink
-      default:
+      case "dark":
         return { filter: "none" };
+      default:
+        // Default to dark gray for better contrast when theme is undefined
+        return {
+          filter:
+            "brightness(0) saturate(100%) invert(8%) sepia(7%) saturate(1077%) hue-rotate(314deg) brightness(95%) contrast(86%)",
+        };
     }
   };
 
